@@ -3,8 +3,8 @@
 // Website related settings
 const settings = {
   isSplash: true, // Change this to true if you want to use the splash screen.
-  useCustomCursor: true, // Change this to false if you want the good'ol cursor
-  googleTrackingID: "UA-174238252-2",
+  useCustomCursor: false, // Change this to false if you want the good'ol cursor
+  googleTrackingID: "UA-132872250-1",
 };
 
 //Home Page
@@ -326,70 +326,60 @@ const degrees = {
 const certifications = {
   certifications: [
     {
-      title: "M0001: MongoDB Basics",
-      subtitle: "MongoDB University",
-      logo_path: "mongo.png",
+      title: "Microservices with Node JS and React",
+      subtitle: "Stephan Grinder - Udemy",
+      logo_path: "micro-service.jpeg",
       certificate_link:
-        "https://drive.google.com/file/d/12se6bMep48WXA1PlizTBAgCnW0GXM6wq/view?usp=sharing",
-      alt_name: "MongoDB University",
+        "https://www.udemy.com/certificate/UC-12f60cc2-269f-4e96-84e0-59cf0dbd87be/",
+      alt_name: "Udemy",
       // color_code: "#2AAFED",
       color_code: "#47A048",
     },
     {
-      title: "Hackathon",
-      subtitle: "Hack The Mountains",
-      logo_path: "hackathon1.svg",
+      title: "Proxmox VE6",
+      subtitle: "Enterprise Server Orchestration",
+      logo_path: "proxmox-ve6.jpeg",
       certificate_link:
-        "https://drive.google.com/file/d/1Y-HT1flWDfeyfnfqVr3ubNgGIcnuUEYt/view?usp=sharing",
-      alt_name: "hackathon",
+        "https://www.udemy.com/certificate/UC-b3cd3812-a1c3-41fe-8f8e-7dbd8593da24/",
+      alt_name: "Proxmox VE6",
       color_code: "#E2405F",
     },
     {
-      title: "A300: Atlas Security",
-      subtitle: "MongoDB University",
-      logo_path: "mongo.png",
+      title: "High Fidelity Designs with Material-UI and ReactJS",
+      subtitle: "Zachary Reece - Udemy",
+      logo_path: "frontend-design.jpeg",
       certificate_link:
-        "https://drive.google.com/file/d/12u_tkvhgB-K2TIm-RDdJOwYbQ9ccqiqA/view?usp=sharing",
-      alt_name: "MongoDB University",
+        "https://www.udemy.com/certificate/UC-535c7e04-9247-4c9c-94bc-0de0ba611f87/",
+      alt_name: "Udemy",
       // color_code: "#F6B808",
       color_code: "#47A048",
     },
     {
-      title: "Cyber Security & Cyber Forensics",
-      subtitle: "Workshop at IIT Bombay",
-      logo_path: "iit.png",
+      title: "UI/UX Responsive Design with Bootstrap5",
+      subtitle: "Hossein Boroji - Udemy",
+      logo_path: "ui-ux-design.jpeg",
       certificate_link:
-        "https://drive.google.com/file/d/12uAdjQC5LfrB1ODdxqIY181ugyyQhl-I/view?usp=sharing",
-      alt_name: "Workshop",
+        "https://www.udemy.com/certificate/UC-229fc7b7-de85-4d32-8d06-3399758b629a/",
+      alt_name: "Udemy",
       color_code: "#2AAFED",
     },
     {
-      title: "MLH Local Hack Day: Build",
-      subtitle: "Major League Hacking",
-      logo_path: "mlh-logo.svg",
+      title: "Ruby Programming",
+      subtitle: "Sololearn",
+      logo_path: "ruby.jpeg",
       certificate_link:
-        "https://drive.google.com/file/d/1ws7g2Oepu76vDFir6SvR_emFAMSkB2ZQ/view?usp=sharing",
-      alt_name: "Google",
+        "https://drive.google.com/file/d/0Bwg2ZZ9uarZocFNsWUo3YlJzSTQ/view?resourcekey=0-cm1rRNjRhVL4llaHjfLllA",
+      alt_name: "sololearn",
       color_code: "#fe0037",
     },
     {
-      title: "Hack20",
-      subtitle: "Flutter International Hackathon",
-      logo_path: "flutter.png",
+      title: "React and Typescript",
+      subtitle: "Stephen Grider - Udemy",
+      logo_path: "react-typescript.jpeg",
       certificate_link:
-        "https://drive.google.com/file/d/1JTd8pVlHbP0RVQYtfa4OZgJYGfdiCwM6/view?usp=sharing",
-      alt_name: "Flutter International Hackathon",
+        "https://www.udemy.com/certificate/UC-be7b98c4-6689-4b01-8a63-ad72b0875396/",
+      alt_name: "Udemy",
       color_code: "#2AAFED",
-    },
-    {
-      title: "Postman Student Expert",
-      subtitle: "Postman",
-      logo_path: "postman.png",
-      certificate_link:
-        "https://badgr.com/public/assertions/h2qevHs4SlyoHErJQ0mn2g",
-      alt_name: "Postman",
-      // color_code: "#f36c3d",
-      color_code: "#fffbf3",
     },
     // color_code: "#8C151599",
     // color_code: "#7A7A7A",
@@ -496,8 +486,8 @@ const contactPageData = {
   blogSection: {
     title: "Blogs",
     subtitle:
-      "I don't blog frequently but when I do something awesome, I do try to document it so it can be helpful to others. I write on Twitter.",
-    link: "https://twitter.com/Harikrushn9",
+      "I don't blog frequently but when I do something awesome, I do try to document it so it can be helpful to others. I write on Medium.",
+    link: "https://medium.com/@sumitgautam_11332",
     avatar_image_path: "blogs_image.svg",
   },
 };
