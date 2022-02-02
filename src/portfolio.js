@@ -615,7 +615,7 @@ const projects = {
     {
       id: "6",
       name: "SumitGA.github.io",
-      url: "",
+      url: "https://github.com/SumitGA/SumitGA",
       description:
         "A Personal Portfolio Website that showcases my work and experience. which is hosted on Github Pages.",
       languages: [
@@ -640,7 +640,7 @@ const projects = {
     {
       id: "6",
       name: "Todo API Golang",
-      url: "",
+      url: "https://github.com/SumitGA/Todo-API-GOlang",
       description: "Api with basic CRUD functionality on Golang. ",
       languages: [
         {
