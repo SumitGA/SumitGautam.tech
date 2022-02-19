@@ -27,6 +27,8 @@ jobs:
           CI: ""
       - run: npm test --if-present
       - run: npm i -g pm2
-      - run: pm2 start --name=sumitgautam.tech npm -- start
+      - run: pm2 update
+      - run: pm2 delete SumitGautam.tech
+      - run: pm2 start --name=SumitGautam.tech npm -- start
       # - run: npm m run build --if-present
 
