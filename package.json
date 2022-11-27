@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "SumitGautam.tech",
-  "homepage": "https://sumitga.github.io/",
+  "homepage": "https://sumitgautam.tech",
   "version": "1.0.0",
   "scripts": {
     "build": "react-scripts build",
