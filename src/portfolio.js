@@ -326,16 +326,6 @@ const degrees = {
 const certifications = {
   certifications: [
     {
-      title: "Ruby on Rails",
-      subtitle: "Solo Learn",
-      logo_path:
-        "https://drive.google.com/file/d/0Bwg2ZZ9uarZocFNsWUo3YlJzSTQ/view?resourcekey=0-cm1rRNjRhVL4llaHjfLllA",
-      certificate_link:
-        "https://drive.google.com/file/d/12se6bMep48WXA1PlizTBAgCnW0GXM6wq/view?usp=sharing",
-      alt_name: "Ruby with Sololearn",
-      color_code: "#47A048",
-    },
-    {
       title: "Microservices with NodeJs and React",
       subtitle: "Microservices with NodeJs and React with Udemy",
       logo_path:
@@ -374,7 +364,27 @@ const certifications = {
       certificate_link:
         "https://www.udemy.com/certificate/UC-b3cd3812-a1c3-41fe-8f8e-7dbd8593da24/",
       alt_name: "Proxmox VE6 - Udemy",
-      color_code: "#fe0037",
+      color_code: "#00FFFF",
+    },
+    {
+      title: "NTF Web Development",
+      subtitle: "Zero to Hero with NFT Web",
+      logo_path:
+        "https://udemy-certificate.s3.amazonaws.com/image/UC-74a4e6e5-5815-43ae-b802-7789a8e26d11.jpg",
+      certificate_link:
+        "https://www.udemy.com/certificate/UC-74a4e6e5-5815-43ae-b802-7789a8e26d11/",
+      alt_name: "NFT Web Development - Udemy",
+      color_code: "#F6B808",
+    },
+    {
+      title: "Advance React Redux",
+      subtitle: "Advance React Redux with Stephen Grider",
+      logo_path:
+        "https://udemy-certificate.s3.amazonaws.com/image/UC-1b26f414-d81b-40d1-8682-f8ecad1d7fc5.jpg",
+      certificate_link:
+        "https://www.udemy.com/certificate/UC-1b26f414-d81b-40d1-8682-f8ecad1d7fc5/",
+      alt_name: "Advance React Redux - Udemy",
+      color_code: "#85219C",
     },
   ],
 };
