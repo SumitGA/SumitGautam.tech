@@ -3,7 +3,7 @@
 // Website related settings
 const settings = {
   isSplash: true, // Change this to true if you want to use the splash screen.
-  useCustomCursor: true, // Change this to false if you want the good'ol cursor
+  useCustomCursor: false, // Change this to false if you want the good'ol cursor
   googleTrackingID: "UA-132872250-1",
 };
 
@@ -17,7 +17,7 @@ const greeting = {
   subTitle:
     "Full Stack Developer, Open Source and AI Enthusiast 🔥. Always learning.",
   resumeLink:
-    "https://drive.google.com/file/d/1Fh8v_EZYpEUidmfw7W7xHiYnuI0UFEeF/view?usp=sharing",
+    "https://drive.google.com/file/d/1EOzPazNAGmz2kGlmVDJ4MEKNHbKVgWHA/view?usp=sharing",
   mail: "mailto:sghost33@gmail.com",
 };
 
@@ -111,15 +111,15 @@ const skills = {
           },
         },
         {
-          skillName: "Swift",
-          fontAwesomeClassname: "simple-icons:swift",
+          skillName: "Python",
+          fontAwesomeClassname: "simple-icons:python",
           style: {
             color: "#F05138",
           },
         },
         {
-          skillName: "Android",
-          fontAwesomeClassname: "simple-icons:android",
+          skillName: "Rust",
+          fontAwesomeClassname: "simple-icons:rust",
           style: {
             color: "#3DDC84",
           },
@@ -401,26 +401,36 @@ const experience = {
       title: "Work Experience",
       experiences: [
         {
+          title: "Software Engineer",
+          company: "Intersect Australia",
+          company_url: "https://intersect.org.au/",
+          logo_path: "intersect-logo.svg",
+          duration: "May 2023 - Nov 2025",
+          location: "WeWork, Level 2, 320 Pitt St, Sydney NSW 2000",
+          description:
+            "Architected and scaled high-performance engineering platforms by integrating Agentic GenAI automation, migrating legacy systems to optimized Rust microservices, and leading cloud-native deployments while mentoring cross-functional teams.",
+          color: "#7c4962",
+        },
+        {
           title: "Full Stack Developer",
           company: "EZY RAISE",
           company_url: "https://www.ezyraise.com/",
-          logo_path: "ezyraise.svg",
-          duration: "Aug 2022- Nov 2022",
+          logo_path: "ezyraise-logo.jpeg",
+          duration: "Aug 2022 - Nov 2022",
           location: "50 Miller St, North Sydney NSW 2060",
           description: `Work closely with the Project Manager and Team Leads on change request functions.
           Develops features new and maintains existing features in the applications.
           Increased productivity and problem-solving technics by 20%.
           We primarily used Ruby on Rails, Haml and React. 80% of my work was doing backend development and the remaining 20% was frontend-related tasks.
           `,
-          // "I worked on the Dashboard project which helps users track their activities while using Walo Application. I also worked on Ocean Inventory Application and it's Admin panel Backend as well as on Ocean Inventory Admin Front-end using React and also worked on Walo Admin Backend.",
           color: "#7c4962",
         },
         {
-          title: "Full Stack Developer",
+          title: "Software Engineer",
           company: "Whitehat Engineering",
           company_url: "https://whitehatengineering.com/",
           logo_path: "whitehatengineering.jpeg",
-          duration: "Mar 2020 - Present",
+          duration: "Jan 2020 - Jan 2022",
           location: "Redmond Washington DC, USA",
           description: `Train, manage and provide guidance to junior software development staff.
           Work closely with the Project Manager and Team Leads on change request functions.
@@ -428,7 +438,6 @@ const experience = {
           Increased productivity and problem-solving technics by 20%.
           We primarily used PERN and MERN Stack. 80% of my work was doing backend development and the remaining 20% was DevOps-related tasks.
           `,
-          // "I worked on the Dashboard project which helps users track their activities while using Walo Application. I also worked on Ocean Inventory Application and it's Admin panel Backend as well as on Ocean Inventory Admin Front-end using React and also worked on Walo Admin Backend.",
           color: "#7c4962",
         },
         {
@@ -441,7 +450,6 @@ const experience = {
           description: `Work closely with the Client and Team on change request functions.
           We Primarily used LAMP Stack. 40% of my work was doing backend development, 30% of my work was designing database schemas, and 30% of my work was on maintain hosting and user traffics on the website.
           `,
-          // "Created Front end of Yearn Financial Mutual Funds website. also degined simple web application for better user experience, designed DB Schemas as well.",
           color: "#7c4962",
         },
         {
@@ -454,7 +462,6 @@ const experience = {
           description: `Work closely with the Client and Team on change request functions.
           We Primarily used LAMP Stack. 40% of my work was doing backend development, 30% of my work was designing database schemas, and 30% of my work was on maintain hosting and user traffics on the website.
           `,
-          // "Created Front end of Yearn Financial Mutual Funds website. also degined simple web application for better user experience, designed DB Schemas as well.",
           color: "#7c4962",
         },
       ],
