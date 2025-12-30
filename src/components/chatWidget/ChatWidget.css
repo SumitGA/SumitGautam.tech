@@ -7,12 +7,13 @@
   flex-direction: column;
   align-items: flex-end;
   padding: 10px;
+  height: auto;
   gap: 15px;
 }
 
 .gradio-container {
   width: 450px;
-  height: 500px;
+  height: 610px;
   border-radius: 20px;
   overflow: hidden;
   display: flex;
@@ -20,19 +21,6 @@
   margin: 0;
   transition: background-color 0.3s ease, border-color 0.3s ease;
   position: relative;
-  min-height: 600px;
-}
-
-/* .gradio-container iframe {
-  height: auto !important;
-  border: none !important;
-} */
-
-/* This is the magic fix for the UI clipping */
-gradio-app {
-  height: 100% !important;
-  display: flex !important;
-  flex-direction: column !important;
 }
 
 .chat-bubble {
