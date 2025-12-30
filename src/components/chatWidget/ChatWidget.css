@@ -1,0 +1,62 @@
+.chat-widget-wrapper {
+  position: fixed;
+  bottom: 20px; /* Distance from bottom of screen */
+  right: 20px; /* Distance from right of screen */
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 10px;
+  height: auto;
+  gap: 15px;
+}
+
+.gradio-container {
+  width: 450px;
+  height: 610px;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  position: relative;
+}
+
+.chat-bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  padding: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.chat-bubble:hover {
+  transform: scale(1.1);
+}
+
+.loader-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .gradio-container {
+    width: 85vw;
+    height: 60vh;
+    right: 20px;
+  }
+}

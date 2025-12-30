@@ -80,7 +80,7 @@ function Header(props) {
           <ul className="menu">
             <li>
               <NavLink
-                className="homei"
+                className="home"
                 to="/home"
                 tag={Link}
                 activeStyle={{ fontWeight: "bold" }}
