@@ -4,6 +4,8 @@ import { Providers } from "./providers";
 import StyledComponentsRegistry from "./styled-registry";
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s | ${site.name}` },
