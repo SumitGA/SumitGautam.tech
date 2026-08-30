@@ -1,5 +1,6 @@
 import { site } from "../lib/site";
 import { Providers } from "./providers";
+import StyledComponentsRegistry from "./styled-registry";
 import "./globals.css";
 
 export const metadata = {
@@ -57,7 +58,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <StyledComponentsRegistry>
+          <Providers>{children}</Providers>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

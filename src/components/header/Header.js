@@ -13,7 +13,7 @@ function Header() {
   const pathname = usePathname();
   const [currTheme, setCurrTheme] = useState(theme.name);
 
-  const link = settings.isSplash ? "/splash" : "/home";
+  const link = "/";
 
   function changeTheme() {
     const next = currTheme === "light" ? "dark" : "light";
@@ -49,7 +49,7 @@ function Header() {
         </label>
         <ul className="menu">
           <li>
-            <Link href="/home" style={{ borderRadius: 5, color: theme.text, ...isActive("/home") }}>
+            <Link href="/" style={{ borderRadius: 5, color: theme.text, ...isActive("/") }}>
               Home
             </Link>
           </li>

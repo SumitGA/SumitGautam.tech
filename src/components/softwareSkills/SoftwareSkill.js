@@ -6,8 +6,8 @@ function SoftwareSkill(props) {
   return (
     <div className="software-skills-main-div">
       <ul className="dev-icons">
-        {props.logos.map((logo) => (
-          <li key={logo.skillName} className="software-skill-inline" title={logo.skillName}>
+        {props.logos.map((logo, i) => (
+          <li key={`${logo.skillName}-${i}`} className="software-skill-inline" title={logo.skillName}>
             <span
               className="iconify"
               data-icon={logo.fontAwesomeClassname}
