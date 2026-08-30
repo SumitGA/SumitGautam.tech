@@ -1,3 +1,41 @@
+@font-face {
+  font-family: "Agustina Regular";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Agustina Regular"), url("/fonts/Agustina.woff") format("woff");
+}
+@font-face {
+  font-family: "Montserrat";
+  src: local("Montserrat"), url("/fonts/Montserrat-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Google Sans Bold";
+  src: local("Google Sans Bold"), url("/fonts/GoogleSans-Bold.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Google Sans Bold Italic";
+  font-style: italic;
+  src: local("Google Sans Bold Italic"), url("/fonts/GoogleSans-BoldItalic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Google Sans Italic";
+  font-style: italic;
+  src: local("Google Sans Italic"), url("/fonts/GoogleSans-Italic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Google Sans Medium";
+  src: local("Google Sans Medium"), url("/fonts/GoogleSans-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Google Sans Medium Italic";
+  font-style: italic;
+  src: local("Google Sans Medium Italic"), url("/fonts/GoogleSans-MediumItalic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Google Sans Regular";
+  src: local("Google Sans Regular"), url("/fonts/GoogleSans-Regular.ttf") format("truetype");
+}
+
 :root { color-scheme: dark; }
 * { box-sizing: border-box; }
 body {
