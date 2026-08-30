@@ -1,26 +1,38 @@
 .experience-accord {
   margin: 50px;
   border-radius: 5px;
-  background-color: #1d1d1d;
   border: 0.1px solid rgba(211, 211, 211, 0.397);
-  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out;
 }
 
 .experience-accord:hover {
-  color: rgba(255, 255, 255, 1);
   box-shadow: 0 5px 15px #e2405f;
 }
 
-.accord-panel {
+.accord-section {
   font-family: "Google Sans Regular";
 }
 
-.accord {
-  background-color: black;
+.accord-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
 }
 
+.accord-header:hover { opacity: 0.85; }
+
+.accord-chevron { font-size: 0.8rem; }
+
+.accord-body { padding: 10px 0; }
+
 @media (max-width: 768px) {
-  .experience-accord {
-    margin: 20px;
-  }
+  .experience-accord { margin: 20px; }
 }
