@@ -1,33 +1,44 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import ExperienceCard from "../../components/experienceCard/ExperienceCard.js";
 import "./ExperienceAccordion.css";
-import { Accordion, Panel } from "baseui/accordion";
-import { DarkTheme, LightTheme, ThemeProvider } from "baseui";
 
 function ExperienceAccordion(props) {
   const theme = props.theme;
+  const [open, setOpen] = useState({});
+
+  const toggle = (title) =>
+    setOpen((prev) => ({ ...prev, [title]: !prev[title] }));
 
   return (
     <div className="experience-accord">
-      <ThemeProvider theme={theme.name === "light" ? LightTheme : DarkTheme}>
-        <Accordion onChange={({ expanded }) => console.log(expanded)}>
-          {props.sections.map((section) => {
-            return (
-              <Panel
-                className="accord-panel"
-                title={section["title"]}
-                key={section["title"]}
-              >
-                {section["experiences"].map((experience) => {
-                  return (
-                    <ExperienceCard experience={experience} theme={theme} />
-                  );
-                })}
-              </Panel>
-            );
-          })}
-        </Accordion>
-      </ThemeProvider>
+      {props.sections.map((section) => (
+        <div key={section.title} className="accord-section">
+          <button
+            className="accord-header"
+            onClick={() => toggle(section.title)}
+            style={{
+              backgroundColor: theme.imageDark,
+              color: theme.text,
+              borderBottom: `1px solid ${theme.accentColor}`,
+            }}
+          >
+            <span>{section.title}</span>
+            <span className="accord-chevron">{open[section.title] ? "▲" : "▼"}</span>
+          </button>
+          {open[section.title] && (
+            <div className="accord-body">
+              {section.experiences.map((experience) => (
+                <ExperienceCard
+                  key={experience.title + experience.company}
+                  experience={experience}
+                  theme={theme}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

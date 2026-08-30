@@ -5,6 +5,54 @@
   align-items: center;
 }
 
+.degree-img-wrapper {
+  width: 220px;
+  height: auto;
+  border-radius: 50%;
+  padding: 10px;
+  margin-right: 50px;
+  transition: box-shadow 0.2s ease-in-out;
+  flex-shrink: 0;
+}
+
+.degree-img-wrapper:hover {
+  box-shadow: 0 5px 15px currentColor;
+}
+
+.degree-card-body {
+  border-radius: 7px;
+  width: 90%;
+  margin: 10px;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.degree-card-body:hover {
+  box-shadow: 0 5px 15px currentColor;
+}
+
+.button-visit {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 1);
+  padding: 15px;
+  margin-top: 25px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  width: 200px;
+  height: 50px;
+  font-weight: bold;
+  font-family: "Google Sans Regular";
+  font-size: 17px;
+  transition: box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+}
+
+.button-visit:hover {
+  box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+}
+
 .card-title {
   font-family: "Google Sans Medium";
   font-size: 23px;

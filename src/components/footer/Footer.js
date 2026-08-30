@@ -1,17 +1,16 @@
+"use client";
 import React from "react";
 import "./Footer.css";
-import { Fade } from "react-reveal";
 import { greeting } from "../../portfolio.js";
-/* eslint-disable jsx-a11y/accessible-emoji */
+import { useAppTheme } from "../../../app/providers";
 
-export default function Footer(props) {
+export default function Footer() {
+  const { theme } = useAppTheme();
   return (
-    <div className="footer-div">
-      <Fade>
-        <p className="footer-text" style={{ color: props.theme.secondaryText }}>
-          Made with <span role="img">❤️</span> by {greeting.title2}
-        </p>
-      </Fade>
+    <div className="footer-div fade-in">
+      <p className="footer-text" style={{ color: theme.secondaryText }}>
+        Made with <span role="img" aria-label="heart">❤️</span> by {greeting.title2}
+      </p>
     </div>
   );
 }
