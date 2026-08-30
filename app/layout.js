@@ -1,4 +1,5 @@
 import { site } from "../lib/site";
+import { getAllSiteData } from "../lib/portfolio-data";
 import { Providers } from "./providers";
 import StyledComponentsRegistry from "./styled-registry";
 import "./globals.css";
@@ -43,7 +44,9 @@ const personSchema = {
   sameAs: [site.github, site.linkedin],
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const siteData = await getAllSiteData();
+
   return (
     <html lang="en">
       <head>
@@ -59,7 +62,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <StyledComponentsRegistry>
-          <Providers>{children}</Providers>
+          <Providers siteData={siteData}>{children}</Providers>
         </StyledComponentsRegistry>
       </body>
     </html>

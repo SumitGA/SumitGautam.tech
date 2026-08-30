@@ -27,3 +27,8 @@ package - Copy.json
 # Next.js
 .next/
 out/
+
+# Admin panel build artefacts
+/admin/.next/
+/admin/node_modules/
+/admin/.env.local

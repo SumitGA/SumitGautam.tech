@@ -4,12 +4,16 @@ import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import ExperienceAccordion from "../../containers/experienceAccordion/ExperienceAccordion.js";
 import "./Experience.css";
-import { experience } from "../../portfolio.js";
 import ExperienceImg from "./ExperienceImg";
 import { useAppTheme } from "../../../app/providers";
+import { useSiteData } from "../../../app/providers";
 
-function Experience() {
+export default function Experience() {
   const { theme } = useAppTheme();
+  const { experience } = useSiteData() || {};
+
+  if (!experience) return null;
+
   return (
     <div className="experience-main">
       <Header />
@@ -36,5 +40,3 @@ function Experience() {
     </div>
   );
 }
-
-export default Experience;

@@ -2,10 +2,12 @@
 import React from "react";
 import "./Educations.css";
 import DegreeCard from "../../components/degreeCard/DegreeCard.js";
-import { degrees } from "../../portfolio";
+import { useSiteData } from "../../../app/providers";
 
-function Educations(props) {
-  const theme = props.theme;
+export default function Educations({ theme }) {
+  const { degrees } = useSiteData() || {};
+  if (!degrees) return null;
+
   return (
     <div className="main" id="educations">
       <div className="educations-header-div">
@@ -21,5 +23,3 @@ function Educations(props) {
     </div>
   );
 }
-
-export default Educations;

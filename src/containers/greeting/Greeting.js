@@ -2,14 +2,17 @@
 import React from "react";
 import "./Greeting.css";
 import SocialMedia from "../../components/socialMedia/SocialMedia";
-import { greeting } from "../../portfolio";
 import { useRouter } from "next/navigation";
 import FeelingProud from "./FeelingProud";
 import { useAppTheme } from "../../../app/providers";
+import { useSiteData } from "../../../app/providers";
 
 export default function Greeting() {
   const { theme } = useAppTheme();
+  const { greeting } = useSiteData() || {};
   const router = useRouter();
+
+  if (!greeting) return null;
 
   return (
     <div className="greet-main fade-in-up" id="greeting">
@@ -18,7 +21,7 @@ export default function Greeting() {
           <div>
             <h1 className="greeting-text">{greeting.title}</h1>
             <p className="greeting-text-p subTitle" style={{ color: theme.secondaryText }}>
-              <span>I'm </span>
+              <span>I&apos;m </span>
               <span style={{ color: theme.accentColor }}>{greeting.full_name}. </span>
               {greeting.subTitle}
             </p>

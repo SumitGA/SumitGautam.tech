@@ -2,18 +2,20 @@
 import React from "react";
 import "./Skills.css";
 import SoftwareSkill from "../../components/softwareSkills/SoftwareSkill";
-import { skills } from "../../portfolio";
+import { useSiteData } from "../../../app/providers";
 import FullStackImg from "./FullStackImg";
 import CloudInfraImg from "./CloudInfraImg";
 
-function GetSkillSvg(props) {
-  if (props.fileName === "FullStackImg") return <FullStackImg theme={props.theme} />;
-  if (props.fileName === "CloudInfraImg") return <CloudInfraImg theme={props.theme} />;
+function GetSkillSvg({ fileName, theme }) {
+  if (fileName === "FullStackImg") return <FullStackImg theme={theme} />;
+  if (fileName === "CloudInfraImg") return <CloudInfraImg theme={theme} />;
   return null;
 }
 
-function SkillSection(props) {
-  const theme = props.theme;
+export default function SkillSection({ theme }) {
+  const { skills } = useSiteData() || {};
+  if (!skills) return null;
+
   return (
     <div>
       {skills.data.map((skill, index) => {
@@ -57,5 +59,3 @@ function SkillSection(props) {
     </div>
   );
 }
-
-export default SkillSection;

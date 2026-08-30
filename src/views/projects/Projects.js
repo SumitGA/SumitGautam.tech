@@ -3,13 +3,17 @@ import React from "react";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
-import { projectsHeader, projects } from "../../portfolio.js";
 import "./Projects.css";
 import ProjectsImg from "./ProjectsImg";
 import { useAppTheme } from "../../../app/providers";
+import { useSiteData } from "../../../app/providers";
 
-function Projects() {
+export default function Projects() {
   const { theme } = useAppTheme();
+  const { projectsHeader, projects } = useSiteData() || {};
+
+  if (!projects) return null;
+
   return (
     <div className="projects-main">
       <Header />
@@ -20,10 +24,10 @@ function Projects() {
           </div>
           <div className="projects-heading-text-div">
             <h1 className="projects-heading-text" style={{ color: theme.text }}>
-              {projectsHeader.title}
+              {projectsHeader?.title}
             </h1>
             <p className="projects-header-detail-text subTitle" style={{ color: theme.secondaryText }}>
-              {projectsHeader.description}
+              {projectsHeader?.description}
             </p>
           </div>
         </div>
@@ -46,5 +50,3 @@ function Projects() {
     </div>
   );
 }
-
-export default Projects;

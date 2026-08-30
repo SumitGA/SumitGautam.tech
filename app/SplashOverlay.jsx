@@ -1,16 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
-import { settings } from "../src/portfolio";
+import { useSiteData } from "./providers";
 
 export default function SplashOverlay() {
   const [visible, setVisible] = useState(false);
+  const { settings } = useSiteData() || {};
 
   useEffect(() => {
-    if (!settings.isSplash) return;
+    if (!settings?.isSplash) return;
     setVisible(true);
     const t = setTimeout(() => setVisible(false), 2000);
     return () => clearTimeout(t);
-  }, []);
+  }, [settings]);
 
   if (!visible) return null;
 

@@ -1,21 +1,21 @@
-name: Build and Deploy
+# Portfolio is now deployed via Vercel (vercel.com).
+# Vercel auto-deploys on push to main-branch — no manual workflow needed.
+#
+# Admin panel (admin/) is deployed as a separate Vercel project.
+#
+# This file is kept for reference. Delete it if you want to avoid confusion.
+# The old GitHub Pages workflow (output: "export" → gh-pages) has been superseded.
+
+name: CI (lint only)
 
 on:
   push:
     branches: [main-branch]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
+  pull_request:
+    branches: [main-branch]
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,18 +24,4 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run build
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - run: npm run lint

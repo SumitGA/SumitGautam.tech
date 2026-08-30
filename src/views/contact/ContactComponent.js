@@ -5,14 +5,18 @@ import Footer from "../../components/footer/Footer";
 import SocialMedia from "../../components/socialMedia/SocialMedia";
 import BlogsImg from "./BlogsImg";
 import "./ContactComponent.css";
-import { greeting, contactPageData } from "../../portfolio.js";
 import { useAppTheme } from "../../../app/providers";
+import { useSiteData } from "../../../app/providers";
 
-const ContactData = contactPageData.contactSection;
-const blogSection = contactPageData.blogSection;
-
-function Contact() {
+export default function Contact() {
   const { theme } = useAppTheme();
+  const { greeting, contactPageData } = useSiteData() || {};
+
+  if (!contactPageData) return null;
+
+  const ContactData = contactPageData.contactSection;
+  const blogSection = contactPageData.blogSection;
+
   return (
     <div className="contact-main">
       <Header />
@@ -34,13 +38,15 @@ function Contact() {
             </p>
             <SocialMedia />
             <br /><br />
-            <a
-              className="general-btn"
-              href={greeting.resumeLink}
-              style={{ backgroundColor: theme.accentBright }}
-            >
-              See my Resume
-            </a>
+            {greeting?.resumeLink && (
+              <a
+                className="general-btn"
+                href={greeting.resumeLink}
+                style={{ backgroundColor: theme.accentBright }}
+              >
+                See my Resume
+              </a>
+            )}
           </div>
         </div>
         <div className="blog-heading-div fade-in-up">
@@ -70,5 +76,3 @@ function Contact() {
     </div>
   );
 }
-
-export default Contact;

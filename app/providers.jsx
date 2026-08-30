@@ -14,7 +14,11 @@ const GlobalStyles = createGlobalStyle`
 const ThemeCtx = createContext({ theme: themes.dark, setTheme: () => {} });
 export const useAppTheme = () => useContext(ThemeCtx);
 
-export function Providers({ children }) {
+// SiteData context — populated by layout.js (server) and consumed by any client component
+const SiteDataCtx = createContext(null);
+export const useSiteData = () => useContext(SiteDataCtx);
+
+export function Providers({ children, siteData }) {
   const [themeName, setThemeState] = useState("dark");
 
   useEffect(() => {
@@ -28,11 +32,13 @@ export function Providers({ children }) {
   }
 
   return (
-    <ThemeCtx.Provider value={{ theme: themes[themeName], setTheme }}>
-      <ThemeProvider theme={themes[themeName]}>
-        <GlobalStyles />
-        {children}
-      </ThemeProvider>
-    </ThemeCtx.Provider>
+    <SiteDataCtx.Provider value={siteData}>
+      <ThemeCtx.Provider value={{ theme: themes[themeName], setTheme }}>
+        <ThemeProvider theme={themes[themeName]}>
+          <GlobalStyles />
+          {children}
+        </ThemeProvider>
+      </ThemeCtx.Provider>
+    </SiteDataCtx.Provider>
   );
 }

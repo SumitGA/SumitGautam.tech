@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
 import "./Certifications.css";
-import { certifications } from "../../portfolio";
 import CertificationCard from "../../components/certificationCard/CertificationCard";
+import { useSiteData } from "../../../app/providers";
 
-function Certifications(props) {
-  const theme = props.theme;
+export default function Certifications({ theme }) {
+  const { certifications } = useSiteData() || {};
+  if (!certifications) return null;
+
   return (
     <div className="main" id="certs">
       <div className="certs-header-div">
@@ -21,5 +23,3 @@ function Certifications(props) {
     </div>
   );
 }
-
-export default Certifications;
