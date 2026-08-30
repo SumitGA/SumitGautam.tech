@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/src/assests/font-awesome
 /.pnp
 /build
 .pnp.js

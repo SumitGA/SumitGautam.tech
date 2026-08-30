@@ -1,2 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
+Allow: /
+Sitemap: https://sumitgautam.tech/sitemap.xml
