@@ -27,3 +27,25 @@ body {
 .fade-in-left { animation: fadeInLeft 0.6s ease both; }
 .fade-in-right{ animation: fadeInRight 0.6s ease both; }
 .fade-in      { animation: fadeIn     0.6s ease both; }
+
+/* Splash overlay balls */
+.ball {
+  width: 90px; height: 10px;
+  margin: 7px auto;
+  border-radius: 50px;
+}
+.ball:nth-child(1) { background:#ff005d; animation: ballRight 1s    infinite ease-in-out; }
+.ball:nth-child(2) { background:#35ff99; animation: ballLeft  1.1s  infinite ease-in-out; }
+.ball:nth-child(3) { background:#008597; animation: ballRight 1.05s infinite ease-in-out; }
+.ball:nth-child(4) { background:#ffcc00; animation: ballLeft  1.15s infinite ease-in-out; }
+.ball:nth-child(5) { background:#2d3443; animation: ballRight 1.1s  infinite ease-in-out; }
+.ball:nth-child(6) { background:#ff7c35; animation: ballLeft  1.05s infinite ease-in-out; }
+.ball:nth-child(7) { background:#4d407c; animation: ballRight 1s    infinite ease-in-out; }
+@keyframes ballRight {
+  0%,100% { transform: translateX(-15px); }
+  50%      { transform: translateX(15px);  }
+}
+@keyframes ballLeft {
+  0%,100% { transform: translateX(15px);  }
+  50%      { transform: translateX(-15px); }
+}
