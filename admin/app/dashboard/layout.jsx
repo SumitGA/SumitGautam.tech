@@ -13,6 +13,7 @@ const navItems = [
   { href: "/dashboard/certifications", label: "Certifications" },
   { href: "/dashboard/projects", label: "Projects" },
   { href: "/dashboard/contact", label: "Contact" },
+  { href: "/dashboard/resume", label: "Resume / CV" },
   { href: "/dashboard/settings", label: "Settings" },
 ];
 

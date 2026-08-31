@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import SocialMedia from "../../components/socialMedia/SocialMedia";
 import BlogsImg from "./BlogsImg";
 import "./ContactComponent.css";
-import { useAppTheme } from "../../../app/providers";
-import { useSiteData } from "../../../app/providers";
+import { useAppTheme, useSiteData } from "../../../app/providers";
 
 export default function Contact() {
   const { theme } = useAppTheme();
@@ -38,15 +38,13 @@ export default function Contact() {
             </p>
             <SocialMedia />
             <br /><br />
-            {greeting?.resumeLink && (
-              <a
-                className="general-btn"
-                href={greeting.resumeLink}
-                style={{ backgroundColor: theme.accentBright }}
-              >
-                See my Resume
-              </a>
-            )}
+            <Link
+              className="general-btn"
+              href="/resume"
+              style={{ backgroundColor: theme.accentBright }}
+            >
+              See my Resume
+            </Link>
           </div>
         </div>
         <div className="blog-heading-div fade-in-up">

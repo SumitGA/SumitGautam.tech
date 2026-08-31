@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import "./Header.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { greeting, settings } from "../../portfolio.js";
 import { CgSun } from "react-icons/cg";
 import { HiMoon } from "react-icons/hi";
-import { useAppTheme } from "../../../app/providers";
+import { useAppTheme, useSiteData } from "../../../app/providers";
 
 function Header() {
   const { theme, setTheme } = useAppTheme();
+  const { greeting } = useSiteData() || {};
   const pathname = usePathname();
   const [currTheme, setCurrTheme] = useState(theme.name);
 
@@ -70,7 +70,12 @@ function Header() {
           </li>
           <li>
             <Link href="/contact" style={{ borderRadius: 5, color: theme.text, ...isActive("/contact") }}>
-              Contact and Resume
+              Contact
+            </Link>
+          </li>
+          <li>
+            <Link href="/resume" style={{ borderRadius: 5, color: theme.text, ...isActive("/resume") }}>
+              Resume
             </Link>
           </li>
           <button

@@ -1,0 +1,315 @@
+/* ============================================================
+   Resume / CV page — screen styles
+   ============================================================ */
+
+.resume-shell {
+  min-height: 100vh;
+  /* No background — Header renders on the site's own theme background */
+}
+
+/* Light area below the nav (wraps toolbar + CV card + footer) */
+.resume-content-area {
+  background: #f0f0f0;
+  padding-bottom: 60px;
+}
+
+/* Download toolbar */
+.resume-toolbar {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  background: #f4f4f4;
+}
+
+.resume-download-btn {
+  background: #1a73e8;
+  color: #fff !important;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 32px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.18s;
+}
+
+.resume-download-btn:hover {
+  background: #1558b0;
+}
+
+/* White CV card centred on screen */
+.resume-page {
+  max-width: 800px;
+  margin: 0 auto 60px;
+  background: #ffffff !important;
+  color: #1a1a1a !important;
+  padding: 48px 60px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.14);
+  border-radius: 3px;
+  font-family: "Google Sans Regular", "Montserrat", Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* ── Header block ─────────────────────────────────────────── */
+
+.rv-header {
+  margin-bottom: 22px;
+}
+
+.rv-name {
+  font-family: "Google Sans Bold", "Montserrat", Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a !important;
+  margin: 0 0 3px;
+  letter-spacing: 0;
+}
+
+.rv-title {
+  font-size: 14px;
+  color: #3c3c3c !important;
+  font-weight: 400;
+  margin: 0 0 4px;
+}
+
+.rv-contact {
+  font-size: 12.5px;
+  color: #555 !important;
+  margin: 0 0 5px;
+}
+
+.rv-note {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1a73e8 !important;
+  margin: 0;
+}
+
+/* ── Section layout ───────────────────────────────────────── */
+
+.rv-section {
+  margin-bottom: 16px;
+}
+
+.rv-section-title {
+  font-family: "Google Sans Bold", "Montserrat", Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a1a !important;
+  margin: 0 0 3px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.rv-rule {
+  border: none;
+  border-top: 1.5px solid #1a1a1a;
+  margin: 0 0 10px;
+}
+
+/* ── Body text ────────────────────────────────────────────── */
+
+.rv-body-text {
+  color: #1a1a1a !important;
+  margin: 0;
+}
+
+/* ── Skills ───────────────────────────────────────────────── */
+
+.rv-skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.rv-skill-row {
+  color: #1a1a1a !important;
+  margin: 0;
+  font-size: 13px;
+}
+
+.rv-skill-category {
+  font-weight: 700;
+  color: #1a1a1a !important;
+}
+
+/* ── Experience ───────────────────────────────────────────── */
+
+.rv-job {
+  margin-bottom: 16px;
+}
+
+.rv-job-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 1px;
+}
+
+.rv-job-title {
+  font-weight: 700;
+  font-family: "Google Sans Bold", "Montserrat", Arial, sans-serif;
+  color: #1a1a1a !important;
+  font-size: 13px;
+}
+
+.rv-job-date {
+  font-size: 12px;
+  color: #555 !important;
+  white-space: nowrap;
+}
+
+.rv-job-company {
+  font-style: italic;
+  font-size: 12.5px;
+  color: #444 !important;
+  margin: 0 0 4px;
+}
+
+.rv-job-desc {
+  font-size: 12.5px;
+  color: #555 !important;
+  margin: 0 0 6px;
+}
+
+.rv-bullets {
+  margin: 4px 0 6px;
+  padding-left: 18px;
+  color: #1a1a1a !important;
+}
+
+.rv-bullets li {
+  margin-bottom: 3px;
+  color: #1a1a1a !important;
+}
+
+.rv-stack {
+  font-size: 11.5px;
+  color: #555 !important;
+  margin: 2px 0 0;
+}
+
+.rv-stack strong {
+  color: #1a1a1a !important;
+}
+
+/* ── Education ────────────────────────────────────────────── */
+
+.rv-edu-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.rv-edu-degree {
+  font-weight: 700;
+  font-family: "Google Sans Bold", "Montserrat", Arial, sans-serif;
+  color: #1a1a1a !important;
+  font-size: 13px;
+}
+
+.rv-edu-year {
+  font-size: 12px;
+  color: #555 !important;
+  white-space: nowrap;
+}
+
+.rv-cert-line {
+  font-size: 12.5px;
+  color: #444 !important;
+  margin: 6px 0 0;
+}
+
+.rv-cert-line strong {
+  color: #1a1a1a !important;
+}
+
+/* ── References ───────────────────────────────────────────── */
+
+.rv-ref-text {
+  font-style: italic;
+  color: #555 !important;
+}
+
+/* ── ensure all text inside resume-page is dark ─────────────
+   Override styled-components body { color: white } in dark mode */
+.resume-page * {
+  color: #1a1a1a !important;
+}
+
+/* Then selectively re-apply lighter colours where needed */
+.resume-page .rv-contact,
+.resume-page .rv-job-date,
+.resume-page .rv-job-company,
+.resume-page .rv-job-desc,
+.resume-page .rv-stack,
+.resume-page .rv-edu-year,
+.resume-page .rv-cert-line,
+.resume-page .rv-ref-text {
+  color: #555 !important;
+}
+
+.resume-page .rv-note {
+  color: #1a73e8 !important;
+}
+
+/* ============================================================
+   Print styles
+   ============================================================ */
+@media print {
+  .no-print,
+  header,
+  footer,
+  nav,
+  .header,
+  .footer-div,
+  .resume-toolbar,
+  .resume-download-btn {
+    display: none !important;
+  }
+
+  body,
+  html {
+    background: #fff !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  .resume-shell,
+  .resume-content-area {
+    background: #fff !important;
+    padding: 0;
+  }
+
+  .resume-page {
+    max-width: 100%;
+    margin: 0;
+    padding: 12mm 16mm;
+    box-shadow: none;
+    border-radius: 0;
+    font-size: 11px;
+  }
+
+  .rv-name {
+    font-size: 22px;
+  }
+
+  /* Keep colours in print */
+  .rv-note,
+  .rv-rule {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}
