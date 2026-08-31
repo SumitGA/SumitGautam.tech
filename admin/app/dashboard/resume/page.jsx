@@ -284,7 +284,7 @@ export default function ResumePage() {
 
   return (
     <div style={{ maxWidth: 820 }}>
-      <Toast />
+      {Toast}
       <h1 style={{ fontSize: 22, marginBottom: 8 }}>Resume / CV</h1>
       <p style={{ color: "var(--muted)", fontSize: 13, marginBottom: 28 }}>
         Changes save to Supabase and appear on <a href="https://sumitgautam.tech/resume" target="_blank" rel="noreferrer" style={{ color: "var(--accent)" }}>sumitgautam.tech/resume</a>
