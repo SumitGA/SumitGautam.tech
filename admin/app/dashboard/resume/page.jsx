@@ -80,7 +80,6 @@ function TextInput({ value, onChange, placeholder }) {
 // ─── main page ────────────────────────────────────────────────────────────────
 
 export default function ResumePage() {
-  const supabase = getSupabaseBrowser();
   const { show, Toast } = useToast();
 
   const [header, setHeader] = useState({
@@ -98,14 +97,15 @@ export default function ResumePage() {
 
   useEffect(() => {
     async function load() {
+      const sb = getSupabaseBrowser();
       const [hRes, sRes, skRes, jRes, eRes, certRes, rRes] = await Promise.all([
-        supabase.from("resume_header").select("*").eq("id", 1).single(),
-        supabase.from("resume_summary").select("*").eq("id", 1).single(),
-        supabase.from("resume_skills").select("*").order("sort_order"),
-        supabase.from("resume_jobs").select("*").order("sort_order"),
-        supabase.from("resume_education_entries").select("*").order("sort_order"),
-        supabase.from("resume_certifications").select("*").eq("id", 1).single(),
-        supabase.from("resume_references").select("*").eq("id", 1).single(),
+        sb.from("resume_header").select("*").eq("id", 1).single(),
+        sb.from("resume_summary").select("*").eq("id", 1).single(),
+        sb.from("resume_skills").select("*").order("sort_order"),
+        sb.from("resume_jobs").select("*").order("sort_order"),
+        sb.from("resume_education_entries").select("*").order("sort_order"),
+        sb.from("resume_certifications").select("*").eq("id", 1).single(),
+        sb.from("resume_references").select("*").eq("id", 1).single(),
       ]);
       if (hRes.data) setHeader({ ...{ website: "", note: "" }, ...hRes.data });
       if (sRes.data) setSummary(sRes.data.content);
@@ -141,15 +141,15 @@ export default function ResumePage() {
   }
 
   async function saveSkills() {
-    await supabase.from("resume_skills").delete().neq("id", 0);
+    await getSupabaseBrowser().from("resume_skills").delete().neq("id", 0);
     const rows = skills.map((s, i) => ({
       category: s.category,
       skill_text: s.skill_text,
       sort_order: i,
     }));
-    const { error } = await supabase.from("resume_skills").insert(rows);
+    const { error } = await getSupabaseBrowser().from("resume_skills").insert(rows);
     if (!error) {
-      const { data } = await supabase.from("resume_skills").select("*").order("sort_order");
+      const { data } = await getSupabaseBrowser().from("resume_skills").select("*").order("sort_order");
       if (data) setSkills(data);
     }
     show(error ? `Error: ${error.message}` : "Skills saved", !error);
@@ -167,10 +167,10 @@ export default function ResumePage() {
       sort_order: job.sort_order,
     };
     if (job.id) {
-      const { error } = await supabase.from("resume_jobs").update(payload).eq("id", job.id);
+      const { error } = await getSupabaseBrowser().from("resume_jobs").update(payload).eq("id", job.id);
       show(error ? `Error: ${error.message}` : "Job saved", !error);
     } else {
-      const { error, data } = await supabase.from("resume_jobs").insert([payload]).select().single();
+      const { error, data } = await getSupabaseBrowser().from("resume_jobs").insert([payload]).select().single();
       if (!error && data) setJobs((prev) => prev.map((j) => (!j.id ? data : j)));
       show(error ? `Error: ${error.message}` : "Job saved", !error);
     }
@@ -178,7 +178,7 @@ export default function ResumePage() {
 
   async function deleteJob(id) {
     if (!id) { setJobs((prev) => prev.filter((j) => j.id)); return; }
-    const { error } = await supabase.from("resume_jobs").delete().eq("id", id);
+    const { error } = await getSupabaseBrowser().from("resume_jobs").delete().eq("id", id);
     if (!error) setJobs((prev) => prev.filter((j) => j.id !== id));
     show(error ? `Error: ${error.message}` : "Job deleted", !error);
   }
@@ -191,10 +191,10 @@ export default function ResumePage() {
       sort_order: entry.sort_order,
     };
     if (entry.id) {
-      const { error } = await supabase.from("resume_education_entries").update(payload).eq("id", entry.id);
+      const { error } = await getSupabaseBrowser().from("resume_education_entries").update(payload).eq("id", entry.id);
       show(error ? `Error: ${error.message}` : "Education saved", !error);
     } else {
-      const { error, data } = await supabase.from("resume_education_entries").insert([payload]).select().single();
+      const { error, data } = await getSupabaseBrowser().from("resume_education_entries").insert([payload]).select().single();
       if (!error && data) setEducation((prev) => prev.map((e) => (!e.id ? data : e)));
       show(error ? `Error: ${error.message}` : "Education saved", !error);
     }
@@ -202,7 +202,7 @@ export default function ResumePage() {
 
   async function deleteEdu(id) {
     if (!id) { setEducation((prev) => prev.filter((e) => e.id)); return; }
-    const { error } = await supabase.from("resume_education_entries").delete().eq("id", id);
+    const { error } = await getSupabaseBrowser().from("resume_education_entries").delete().eq("id", id);
     if (!error) setEducation((prev) => prev.filter((e) => e.id !== id));
     show(error ? `Error: ${error.message}` : "Deleted", !error);
   }
