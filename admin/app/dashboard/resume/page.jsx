@@ -127,14 +127,14 @@ export default function ResumePage() {
   // ─── save helpers ──────────────────────────────────────────────────────────
 
   async function saveHeader() {
-    const { error } = await supabase
+    const { error } = await getSupabaseBrowser()
       .from("resume_header")
       .upsert({ ...header, id: 1 });
     show(error ? `Error: ${error.message}` : "Header saved", error ? "error" : "success");
   }
 
   async function saveSummary() {
-    const { error } = await supabase
+    const { error } = await getSupabaseBrowser()
       .from("resume_summary")
       .upsert({ id: 1, content: summary });
     show(error ? `Error: ${error.message}` : "Summary saved", error ? "error" : "success");
@@ -208,14 +208,14 @@ export default function ResumePage() {
   }
 
   async function saveCertifications() {
-    const { error } = await supabase
+    const { error } = await getSupabaseBrowser()
       .from("resume_certifications")
       .upsert({ id: 1, content: certifications });
     show(error ? `Error: ${error.message}` : "Certifications saved", error ? "error" : "success");
   }
 
   async function saveReferences() {
-    const { error } = await supabase
+    const { error } = await getSupabaseBrowser()
       .from("resume_references")
       .upsert({ id: 1, content: references });
     show(error ? `Error: ${error.message}` : "References saved", error ? "error" : "success");
