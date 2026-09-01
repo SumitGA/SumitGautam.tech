@@ -130,14 +130,14 @@ export default function ResumePage() {
     const { error } = await supabase
       .from("resume_header")
       .upsert({ ...header, id: 1 });
-    show(error ? `Error: ${error.message}` : "Header saved", !error);
+    show(error ? `Error: ${error.message}` : "Header saved", error ? "error" : "success");
   }
 
   async function saveSummary() {
     const { error } = await supabase
       .from("resume_summary")
       .upsert({ id: 1, content: summary });
-    show(error ? `Error: ${error.message}` : "Summary saved", !error);
+    show(error ? `Error: ${error.message}` : "Summary saved", error ? "error" : "success");
   }
 
   async function saveSkills() {
@@ -152,7 +152,7 @@ export default function ResumePage() {
       const { data } = await getSupabaseBrowser().from("resume_skills").select("*").order("sort_order");
       if (data) setSkills(data);
     }
-    show(error ? `Error: ${error.message}` : "Skills saved", !error);
+    show(error ? `Error: ${error.message}` : "Skills saved", error ? "error" : "success");
   }
 
   async function saveJob(job) {
@@ -168,11 +168,11 @@ export default function ResumePage() {
     };
     if (job.id) {
       const { error } = await getSupabaseBrowser().from("resume_jobs").update(payload).eq("id", job.id);
-      show(error ? `Error: ${error.message}` : "Job saved", !error);
+      show(error ? `Error: ${error.message}` : "Job saved", error ? "error" : "success");
     } else {
       const { error, data } = await getSupabaseBrowser().from("resume_jobs").insert([payload]).select().single();
       if (!error && data) setJobs((prev) => prev.map((j) => (!j.id ? data : j)));
-      show(error ? `Error: ${error.message}` : "Job saved", !error);
+      show(error ? `Error: ${error.message}` : "Job saved", error ? "error" : "success");
     }
   }
 
@@ -180,7 +180,7 @@ export default function ResumePage() {
     if (!id) { setJobs((prev) => prev.filter((j) => j.id)); return; }
     const { error } = await getSupabaseBrowser().from("resume_jobs").delete().eq("id", id);
     if (!error) setJobs((prev) => prev.filter((j) => j.id !== id));
-    show(error ? `Error: ${error.message}` : "Job deleted", !error);
+    show(error ? `Error: ${error.message}` : "Job deleted", error ? "error" : "success");
   }
 
   async function saveEduEntry(entry) {
@@ -192,11 +192,11 @@ export default function ResumePage() {
     };
     if (entry.id) {
       const { error } = await getSupabaseBrowser().from("resume_education_entries").update(payload).eq("id", entry.id);
-      show(error ? `Error: ${error.message}` : "Education saved", !error);
+      show(error ? `Error: ${error.message}` : "Education saved", error ? "error" : "success");
     } else {
       const { error, data } = await getSupabaseBrowser().from("resume_education_entries").insert([payload]).select().single();
       if (!error && data) setEducation((prev) => prev.map((e) => (!e.id ? data : e)));
-      show(error ? `Error: ${error.message}` : "Education saved", !error);
+      show(error ? `Error: ${error.message}` : "Education saved", error ? "error" : "success");
     }
   }
 
@@ -204,21 +204,21 @@ export default function ResumePage() {
     if (!id) { setEducation((prev) => prev.filter((e) => e.id)); return; }
     const { error } = await getSupabaseBrowser().from("resume_education_entries").delete().eq("id", id);
     if (!error) setEducation((prev) => prev.filter((e) => e.id !== id));
-    show(error ? `Error: ${error.message}` : "Deleted", !error);
+    show(error ? `Error: ${error.message}` : "Deleted", error ? "error" : "success");
   }
 
   async function saveCertifications() {
     const { error } = await supabase
       .from("resume_certifications")
       .upsert({ id: 1, content: certifications });
-    show(error ? `Error: ${error.message}` : "Certifications saved", !error);
+    show(error ? `Error: ${error.message}` : "Certifications saved", error ? "error" : "success");
   }
 
   async function saveReferences() {
     const { error } = await supabase
       .from("resume_references")
       .upsert({ id: 1, content: references });
-    show(error ? `Error: ${error.message}` : "References saved", !error);
+    show(error ? `Error: ${error.message}` : "References saved", error ? "error" : "success");
   }
 
   // ─── local mutators ────────────────────────────────────────────────────────
