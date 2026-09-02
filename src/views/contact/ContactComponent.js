@@ -7,6 +7,7 @@ import SocialMedia from "../../components/socialMedia/SocialMedia";
 import BlogsImg from "./BlogsImg";
 import "./ContactComponent.css";
 import { useAppTheme, useSiteData } from "../../../app/providers";
+import ContactForm from "../../components/contactForm/ContactForm";
 
 export default function Contact() {
   const { theme } = useAppTheme();
@@ -69,6 +70,7 @@ export default function Contact() {
             <BlogsImg theme={theme} />
           </div>
         </div>
+        <ContactForm theme={theme} />
       </div>
       <Footer />
     </div>

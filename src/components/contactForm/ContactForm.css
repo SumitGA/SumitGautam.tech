@@ -1,0 +1,131 @@
+.cf-wrapper {
+  max-width: 640px;
+  margin: 60px auto 40px;
+  padding: 0 16px;
+}
+
+.cf-heading {
+  font-size: 28px;
+  font-family: "Google Sans Medium", "Montserrat", Arial, sans-serif;
+  font-weight: 500;
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.cf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cf-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.cf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cf-label {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: "Google Sans Medium", Arial, sans-serif;
+}
+
+.cf-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: "Google Sans Regular", Arial, sans-serif;
+  background: transparent;
+  color: inherit;
+  transition: border-color 0.18s;
+  outline: none;
+}
+
+.cf-input:focus {
+  border-color: #1a73e8;
+}
+
+.cf-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cf-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.cf-submit {
+  align-self: center;
+  width: 200px;
+  padding: 13px 0;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Google Sans Regular", Arial, sans-serif;
+  cursor: pointer;
+  transition: opacity 0.18s;
+  margin-top: 4px;
+}
+
+.cf-submit:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.cf-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.cf-error {
+  color: #d32f2f;
+  font-size: 14px;
+  text-align: center;
+  margin: 0;
+}
+
+.cf-success {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.cf-success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #1a73e8;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.cf-success p {
+  font-size: 18px;
+  font-family: "Google Sans Medium", Arial, sans-serif;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .cf-row-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .cf-heading {
+    font-size: 22px;
+  }
+}
