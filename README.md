@@ -1,61 +1,125 @@
-# PortfolioV2
-### A clean portfolio template. (Readme will be updated soon)
+# SumitGautam.tech — Portfolio
 
-# Sections
+Personal portfolio website built with Next.js 16 App Router and deployed to [sumitgautam.tech](https://sumitgautam.tech).
 
-- Home
-- Education and Certificates
-- Experience
-- Projects
-- Contact and Resume
+## Features
 
-# How To Use
+- **Home** — Hero section with greeting, skills showcase, and social links
+- **Experience** — Work history with company logos and descriptions
+- **Education** — Degrees and certification cards
+- **Projects** — GitHub project cards with language badges
+- **Contact** — Profile, social links, and a contact form with email delivery
+- **Resume / CV** — Formatted CV page with a Download PDF button
+- **Dark / Light theme** — Toggle in the header, persisted to localStorage
+- **Admin panel** — CMS to edit all portfolio content via Supabase (separate deploy)
 
-- Clone this repository (or fork, then clone your fork :) )
-- Run `npm i`
-- Check it out using `npm start`
+## Tech Stack
 
-# How Do I Customize
+- [Next.js 16](https://nextjs.org/) — App Router, Server Components
+- [React 19](https://react.dev/)
+- [Supabase](https://supabase.com/) — PostgreSQL + auth
+- [styled-components](https://styled-components.com/) — Theming
+- [Resend](https://resend.com/) — Contact form email delivery
+- [Vercel](https://vercel.com/) — Hosting (portfolio + admin on separate projects)
 
-- Replace `homepage` in package.json to your domain name or `https://<username>.github.io`
-- In `src/portfolio.js` you can add your personal portfolio details.
-- In `src/theme.js` you can change the theme colors. You can change between Light and Dark theme with the theme switch on the header.
+## Local Setup
 
-# How to Deploy
+### 1. Clone and install
 
-- Once you are done with your setup and have successfully completed all steps above, you need to put your website online!
-- I highly recommend using [Github Pages](https://create-react-app.dev/docs/deployment/#github-pages) to achieve this the EASIEST WAY.
-- To deploy your website, you have two options. First you need to create a github repository with the name `<your-github-username>.github.io`. Please don't give it any other name.
-- Now, you need to generate a production build and deploy the website.
+```bash
+git clone https://github.com/SumitGA/SumitGautam.tech.git
+cd SumitGautam.tech
+npm install
+```
 
-**Option 1:**
+### 2. Environment variables
 
-- Run `npm run build` to generate the production build folder.
-- Enter the build folder, `git init` and push the generated code to the `master` branch of your new repository. That's it. Done.
-  You may need to `git init` and force push at every new build.
+```bash
+cp .env.local.example .env.local
+```
 
-**Option 2 (will not work with [user pages](https://docs.github.com/en/github/working-with-github-pages/about-github-pages)):**
+Edit `.env.local` and fill in:
 
-- Run `npm run deploy` to build and create a branch called `gh-pages`. It will push the `build` files to that branch.
-- The last step in deploying is to enable `Github Pages` in settings of the repository and select `gh-pages` branch.
+| Variable | Where to get it |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase Dashboard → Settings → API |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase Dashboard → Settings → API |
+| `RESEND_API_KEY` | [resend.com/api-keys](https://resend.com/api-keys) |
 
-Now, your website is successfully deployed and you can visit it at `<your-github-username>.github.io`.  
+Without Supabase credentials the site runs using the static fallback data in `src/portfolio.js`. Without a Resend key the contact form will fail — comment out the form or skip email locally.
 
+### 3. Run
 
-# Technologies used 🛠️
+```bash
+npm run dev
+# http://localhost:3000
+```
 
-- [React](https://reactjs.org/)
-- [graphql](https://graphql.org/)
-- [apollo-boost](https://www.apollographql.com/docs/react/get-started/)
-- [baseui](https://github.com/uber/baseweb)
-- [react-reveal](https://www.react-reveal.com/)
-- [styled-components](https://styled-components.com/)
+## Customise Content
 
-# illustrations 🍥
+### Without a database (static mode)
 
-- [UnDraw](https://undraw.co/illustrations)
+Edit `src/portfolio.js` — all portfolio sections are plain JS objects.
 
-# References
+### With Supabase (dynamic mode)
 
-Based on https://github.com/ashutosh1919/masterPortfolio/ and https://github.com/saadpasta/developerFolio
-Illustrations: https://undraw.co/
+1. Create a Supabase project
+2. Run `supabase/schema.sql` then `supabase/resume_schema.sql` in the SQL editor
+3. Add env vars as above
+4. Use the admin panel (see below) to edit content through a UI
+
+## Admin Panel
+
+The admin panel lives in `admin/` and is a separate Next.js 15 project deployed at `admin.sumitgautam.tech`.
+
+```bash
+cd admin
+cp .env.local.example .env.local   # fill in Supabase + auth vars
+npm install
+npm run dev   # http://localhost:3001
+```
+
+Admin sections: Greeting · Skills · Experience · Education · Certifications · Projects · Contact · Resume/CV · Settings
+
+## Resume / CV Page
+
+The `/resume` route renders an A4-style CV card. Hit **Download PDF** to print it through the browser.
+
+Content is editable in the admin panel under "Resume / CV" and stored in separate Supabase tables (`resume_header`, `resume_summary`, `resume_skills`, `resume_jobs`, `resume_education_entries`, `resume_certifications`, `resume_references`).
+
+## Contact Form
+
+The contact form on `/contact` posts to `POST /api/contact`, which sends an email via Resend to the portfolio owner. Reply-To is set to the sender's address.
+
+By default emails come from Resend's `onboarding@resend.dev` test address. To send from your own domain (e.g. `noreply@yourdomain.com`), verify the domain in the Resend dashboard and set `RESEND_FROM_EMAIL` in your env vars.
+
+## Deployment (Vercel)
+
+### Portfolio
+
+1. Push code to GitHub
+2. Import repo in Vercel → set root directory to `.` (default)
+3. Add environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `RESEND_API_KEY`
+4. **Set Production Branch to `main-branch`** in Vercel Settings → Git (not `main`)
+5. Connect your custom domain in Vercel Settings → Domains
+
+### Admin panel
+
+1. Create a **separate** Vercel project for the same repo
+2. Set root directory to `admin/`
+3. Set Production Branch to `main-branch`
+4. Add admin env vars: Supabase keys, `SUPABASE_SERVICE_ROLE_KEY`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `ADMIN_PASSWORD`
+5. Connect `admin.yourdomain.com`
+
+### Supabase migrations
+
+Run SQL files in Supabase SQL Editor (Dashboard → SQL Editor):
+1. `supabase/schema.sql` — portfolio tables
+2. `supabase/resume_schema.sql` — resume tables
+
+If RLS policies fail mid-run, `supabase/resume_patch.sql` is an idempotent patch that is safe to re-run.
+
+## References
+
+Based on [ashutosh1919/masterPortfolio](https://github.com/ashutosh1919/masterPortfolio) and [saadpasta/developerFolio](https://github.com/saadpasta/developerFolio).
+Illustrations: [undraw.co](https://undraw.co/)
