@@ -29,8 +29,10 @@ It was migrated from CRA + HashRouter. The old CRA-style files still exist under
 ```
 app/                   Next.js App Router pages and API routes
   layout.js            Root layout — fetches all site data server-side via getAllSiteData()
-  page.js              Splash or home redirect (reads settings.isSplash)
-  home/page.js
+  page.js              Home page — renders SplashOverlay + HomeContent
+                       (there is no /home route; `/` IS the home page)
+  SplashOverlay.jsx    2s splash shown when settings.isSplash is true
+  HomeContent.jsx      Header + Greeting + Skills + Footer + ChatWidget
   experience/page.js
   education/page.js
   projects/page.js
@@ -41,6 +43,8 @@ app/                   Next.js App Router pages and API routes
     resume.css         CV styles + print styles
   api/contact/
     route.js           POST handler — receives form data, sends email via Resend
+  api/chat/
+    route.js           POST handler — streams AI chat replies via Google Gemini
 
 src/
   portfolio.js         Static fallback content (used when Supabase is unavailable)
@@ -50,6 +54,9 @@ src/
     contactForm/
       ContactForm.jsx  Contact form component (name/email/subject/message)
       ContactForm.css
+    chatWidget/
+      ChatWidget.js    Floating AI chat assistant (home page only)
+      ChatWidget.css
 
 lib/
   portfolio-data.js    Server-side Supabase fetchers with static fallbacks
@@ -87,9 +94,15 @@ All routes live in `app/`. The old `src/containers/Main.js` router is no longer 
 ```
 NEXT_PUBLIC_SUPABASE_URL        Supabase project URL (browser-safe)
 NEXT_PUBLIC_SUPABASE_ANON_KEY   Supabase anon key (browser-safe)
+SUPABASE_SERVICE_ROLE_KEY       Service role key — used by the chat rate limiter
 RESEND_API_KEY                  Resend API key for contact form emails
 RESEND_FROM_EMAIL               (optional) From address — must be Resend-verified domain
 CONTACT_TO_EMAIL                (optional) Recipient email, default: sumitga@sumitgautam.tech
+GEMINI_API_KEY                  Google Gemini API key for the AI chatbot
+GEMINI_MODEL                    (optional) default: gemini-3.1-flash-lite
+GEMINI_FALLBACK_MODEL           (optional) default: gemini-3.5-flash-lite
+CHAT_RATE_LIMIT                 (optional) messages per IP per window, default 15
+CHAT_RATE_WINDOW_SECONDS        (optional) window length, default 3600
 ```
 
 Copy `.env.local.example` to `.env.local` and fill in values.
@@ -140,7 +153,15 @@ All tables use Row Level Security (RLS):
 | `resume_certifications` | Single-row text blob |
 | `resume_references` | Single-row text blob |
 
-To apply schema from scratch: run `supabase/schema.sql` then `supabase/resume_schema.sql` in Supabase SQL Editor.
+### Chat rate limiting
+
+| Table / function | Purpose |
+|---|---|
+| `chat_rate_limit` | Per-IP counters for `/api/chat` (RLS on, service-role access only) |
+| `check_chat_rate_limit()` | Atomic check-and-increment, returns TRUE if allowed |
+| `prune_chat_rate_limit()` | Housekeeping — drops rows older than a day |
+
+To apply schema from scratch: run `supabase/schema.sql`, then `supabase/resume_schema.sql`, then `supabase/chat_rate_limit.sql` in Supabase SQL Editor.
 To fix a broken RLS-only migration: run `supabase/resume_patch.sql` (idempotent — safe to re-run).
 
 ### Critical Supabase pattern
@@ -174,6 +195,31 @@ async function saveData() {
 - Without `RESEND_FROM_EMAIL` set, sends from `onboarding@resend.dev` (Resend's test address)
 - To send from `noreply@sumitgautam.tech`, verify the domain in Resend dashboard and add the DNS records in Cloudflare
 
+### AI chatbot (floating widget, home page only)
+
+- `ChatWidget` (`src/components/chatWidget/`) posts to `POST /api/chat`, which streams replies from Google Gemini
+- Rendered by `app/HomeContent.jsx` — it does **not** appear on Contact/Resume/Projects/Experience
+- The system prompt is built from live Supabase data (resume header, summary, skills, jobs, education, certs, projects, bio) so answers track whatever the admin panel contains. Cached in module scope for 10 minutes.
+- The prompt builder deliberately calls `getGreeting()` + `getProjects()` rather than `getAllSiteData()` — the latter queries ~12 tables for two fields, and this runs on every cold start.
+
+**Model constraints (learned the hard way — do not "upgrade" without checking):**
+
+| Constraint | Detail |
+|---|---|
+| Free-tier daily cap | Full Flash models (`gemini-3.8-flash` etc.) allow only **20 requests/day**. Flash-Lite has a far higher cap — hence `gemini-3.1-flash-lite` as default. |
+| `thinkingConfig` | Flash-Lite rejects `thinkingConfig` with a 400. Do not add it. Lite doesn't spend tokens on reasoning anyway. |
+| Streaming vs non-streaming | `gemini-3.5-flash-lite` responds fine to `generateContent` but stalls >20s on `generateContentStream`. Test the *streaming* path when changing models. |
+| Model retirement | `gemini-2.0-flash` and `gemini-2.5-flash` are retired and 404 with a message naming the replacement. Expect this to recur. |
+
+**Route design notes:**
+
+- Retries only happen **before the first byte is sent**. Once the visitor is reading a sentence we can't restart it, so a mid-stream failure appends `" …"` and closes cleanly.
+- Each attempt gets a 20s `AbortSignal.timeout()` — a hung request is worse than a fast failover.
+- `enqueue`/`close` go through guarded `push()`/`finish()` helpers; without them, a visitor navigating away mid-answer throws "Invalid state: Controller is already closed".
+- 429 / `RESOURCE_EXHAUSTED` breaks out of the retry loop and returns a distinct "daily limit" message — retrying an exhausted quota is pointless.
+- `export const maxDuration = 60` — Vercel's default would kill a slow first token.
+- Rate limiting fails **open**: if Supabase is unreachable the chat still works.
+
 ### Admin panel (`admin/`)
 
 - Separate Next.js 15 project deployed to `admin.sumitgautam.tech` on a separate Vercel project
@@ -196,9 +242,17 @@ git push origin main-branch
 Add these environment variables in Vercel project settings:
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY` (required for chat rate limiting)
 - `RESEND_API_KEY`
 - `RESEND_FROM_EMAIL` (optional — for custom domain sending)
 - `CONTACT_TO_EMAIL` (optional)
+- `GEMINI_API_KEY` (required for the chatbot)
+
+Note: GitHub Actions CI (`.github/workflows/deploy.yml`) only runs `npm run build` as a
+check — it needs the two `NEXT_PUBLIC_*` values as repo secrets, nothing else. Runtime
+secrets live in Vercel. Never initialise an API client at module scope; the build
+evaluates route modules without runtime env vars and will fail (this is what broke the
+Resend route — see `app/api/contact/route.js` for the lazy-init pattern).
 
 ### Admin panel (admin.sumitgautam.tech)
 
