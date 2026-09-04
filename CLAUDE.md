@@ -228,6 +228,42 @@ async function saveData() {
 - Toast notifications use `useToast` — always pass `error ? "error" : "success"` (string), never a boolean
 - Render Toast as `{Toast}` (JSX element value), never `<Toast />` (component)
 
+## Releases
+
+Versioned with **standard SemVer** (`MAJOR.MINOR.PATCH`), tagged as `vX.Y.Z`.
+
+| Bump | When | Example |
+|---|---|---|
+| PATCH `1.0.1` | Bug fixes, no new capability | Fix the Iconify hydration mismatch |
+| MINOR `1.1.0` | New feature, nothing breaks | Add an analytics dashboard |
+| MAJOR `2.0.0` | Breaking change | Rarely applicable to this site |
+
+Content edited through the admin panel is **not** a release — it changes no code.
+
+### Cutting a release
+
+```bash
+# 1. Bump the version in package.json (and admin/package.json if it changed)
+# 2. Commit the bump
+git commit -am "Release 1.0.1"
+
+# 3. Annotated tag — the message becomes the GitHub release notes
+git tag -a v1.0.1 -F /tmp/release-notes.txt
+
+# 4. Push both
+git push origin main-branch
+git push origin v1.0.1
+```
+
+Then on GitHub: **Releases → Draft a new release →** pick the existing tag. The
+annotated tag message pre-fills the notes.
+
+`gh` CLI is **not installed** on this machine, so releases are published through
+the web UI. `brew install gh` would allow `gh release create` instead.
+
+Release notes should carry a **Known issues** section — `v1.0.0` documents the
+Iconify CDN hydration mismatch, the absent analytics, and the dead CRA files.
+
 ## Deployment
 
 ### Portfolio (sumitgautam.tech)
