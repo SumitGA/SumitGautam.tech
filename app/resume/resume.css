@@ -47,7 +47,7 @@
   padding: 48px 60px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.14);
   border-radius: 3px;
-  font-family: "Google Sans Regular", "Montserrat", Arial, sans-serif;
+  font-family: var(--font-text);
   font-size: 13px;
   line-height: 1.65;
 }
@@ -59,7 +59,7 @@
 }
 
 .rv-name {
-  font-family: "Google Sans Bold", "Montserrat", Arial, sans-serif;
+  font-family: var(--font-display);
   font-size: 28px;
   font-weight: 700;
   color: #1a1a1a !important;
@@ -94,7 +94,7 @@
 }
 
 .rv-section-title {
-  font-family: "Google Sans Bold", "Montserrat", Arial, sans-serif;
+  font-family: var(--font-display);
   font-size: 13px;
   font-weight: 700;
   color: #1a1a1a !important;
@@ -152,7 +152,7 @@
 
 .rv-job-title {
   font-weight: 700;
-  font-family: "Google Sans Bold", "Montserrat", Arial, sans-serif;
+  font-family: var(--font-display);
   color: #1a1a1a !important;
   font-size: 13px;
 }
@@ -210,7 +210,7 @@
 
 .rv-edu-degree {
   font-weight: 700;
-  font-family: "Google Sans Bold", "Montserrat", Arial, sans-serif;
+  font-family: var(--font-display);
   color: #1a1a1a !important;
   font-size: 13px;
 }

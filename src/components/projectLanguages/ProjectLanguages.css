@@ -11,7 +11,7 @@
   display: inline-block;
   margin-right: 20px;
   margin-bottom: 0px;
-  font-family: "Google Sans Regular";
+  font-family: var(--font-text);
 }
 
 #tooltip-top > .tooltip-inner {

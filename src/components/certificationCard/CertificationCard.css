@@ -26,16 +26,18 @@
 }
 
 .cert-body-title {
-  font-family: "Google Sans Regular";
+  font-family: var(--font-display);
   font-size: 20px;
   margin: 10px;
+  font-weight: 500;
 }
 
 .cert-body-subtitle {
-  font-family: "Google Sans Regular";
+  font-family: var(--font-display);
   font-size: 18px;
   color: #808080;
   margin: 10px;
+  font-weight: 400;
 }
 
 .content {
@@ -86,7 +88,7 @@
 .content-details h3 {
   color: #fff;
   font-weight: 500;
-  font-family: "Google Sans Regular";
+  font-family: var(--font-display);
   letter-spacing: 0.15em;
   margin-bottom: 0.5em;
   text-transform: uppercase;

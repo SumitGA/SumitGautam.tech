@@ -11,7 +11,7 @@
 }
 
 .accord-section {
-  font-family: "Google Sans Regular";
+  font-family: var(--font-display);
 }
 
 .accord-header {

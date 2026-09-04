@@ -11,7 +11,7 @@
   display: inline-block;
   margin-right: 20px;
   margin-bottom: 20px;
-  font-family: "Google Sans Regular";
+  font-family: var(--font-text);
 }
 
 .software-skill-inline > i {

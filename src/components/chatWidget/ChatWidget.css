@@ -36,7 +36,7 @@
   color: #fff;
   font-weight: 700;
   font-size: 15px;
-  font-family: "Google Sans Medium", Arial, sans-serif;
+  font-family: var(--font-display);
 }
 
 .chat-close {
@@ -90,7 +90,7 @@
   padding: 8px 12px;
   font-size: 13px;
   cursor: pointer;
-  font-family: "Google Sans Regular", Arial, sans-serif;
+  font-family: var(--font-text);
   transition: opacity 0.18s;
   text-align: left;
 }
@@ -107,7 +107,7 @@
   line-height: 1.5;
   white-space: pre-wrap;
   word-wrap: break-word;
-  font-family: "Google Sans Regular", Arial, sans-serif;
+  font-family: var(--font-text);
   animation: chat-fade-in 0.2s ease;
 }
 
@@ -185,7 +185,7 @@
   border-radius: 20px;
   padding: 10px 14px;
   font-size: 14px;
-  font-family: "Google Sans Regular", Arial, sans-serif;
+  font-family: var(--font-text);
   background: transparent;
   outline: none;
   max-height: 100px;

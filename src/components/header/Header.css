@@ -35,8 +35,8 @@
 }
 
 .header .logo-name {
-  font-family: "Google Sans Regular";
-  font-weight: bold;
+  font-family: var(--font-display);
+  font-weight: 700;
   padding: 0 10px;
   letter-spacing: 3px;
   /* color: #55198b; */
@@ -45,7 +45,7 @@
 /* menu */
 
 .menu {
-  font-family: "Google Sans Regular";
+  font-family: var(--font-display);
 }
 
 .header .menu {

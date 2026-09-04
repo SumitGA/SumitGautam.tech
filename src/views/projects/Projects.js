@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { FaGithub } from "react-icons/fa";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
@@ -37,15 +38,18 @@ export default function Projects() {
           <ProjectCard key={repo.id + repo.name} repo={repo} theme={theme} />
         ))}
       </div>
-      <br /><br /><br />
-      <a
-        className="general-btn"
-        href="https://github.com/SumitGA"
-        style={{ backgroundColor: theme.accentBright }}
-      >
-        More Projects (Github)
-      </a>
-      <br /><br />
+      <div className="projects-btn-div">
+        <a
+          className="general-btn"
+          href="https://github.com/SumitGA"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ backgroundColor: theme.accentBright }}
+        >
+          <FaGithub />
+          More projects on GitHub
+        </a>
+      </div>
       <Footer />
     </div>
   );

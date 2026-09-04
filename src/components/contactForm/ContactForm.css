@@ -6,7 +6,7 @@
 
 .cf-heading {
   font-size: 28px;
-  font-family: "Google Sans Medium", "Montserrat", Arial, sans-serif;
+  font-family: var(--font-display);
   font-weight: 500;
   margin-bottom: 28px;
   text-align: center;
@@ -32,8 +32,8 @@
 
 .cf-label {
   font-size: 13px;
-  font-weight: 600;
-  font-family: "Google Sans Medium", Arial, sans-serif;
+  font-weight: 500;
+  font-family: var(--font-display);
 }
 
 .cf-input {
@@ -43,7 +43,7 @@
   border: 1.5px solid #ccc;
   border-radius: 6px;
   font-size: 15px;
-  font-family: "Google Sans Regular", Arial, sans-serif;
+  font-family: var(--font-text);
   background: transparent;
   color: inherit;
   transition: border-color 0.18s;
@@ -73,7 +73,7 @@
   color: #fff;
   font-size: 16px;
   font-weight: 700;
-  font-family: "Google Sans Regular", Arial, sans-serif;
+  font-family: var(--font-text);
   cursor: pointer;
   transition: opacity 0.18s;
   margin-top: 4px;
@@ -116,8 +116,9 @@
 
 .cf-success p {
   font-size: 18px;
-  font-family: "Google Sans Medium", Arial, sans-serif;
+  font-family: var(--font-display);
   margin: 0;
+  font-weight: 500;
 }
 
 @media (max-width: 600px) {

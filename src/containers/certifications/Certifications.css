@@ -1,8 +1,9 @@
 .certs-header {
   font-size: 40px;
   line-height: 1.1;
-  font-family: "Google Sans Regular";
+  font-family: var(--font-display);
   text-align: center;
+  font-weight: 500;
 }
 
 .certs-body-div {

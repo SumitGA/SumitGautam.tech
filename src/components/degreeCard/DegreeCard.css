@@ -39,8 +39,8 @@
   margin-bottom: 20px;
   width: 200px;
   height: 50px;
-  font-weight: bold;
-  font-family: "Google Sans Regular";
+  font-weight: 700;
+  font-family: var(--font-display);
   font-size: 17px;
   transition: box-shadow 0.2s ease-in-out;
   cursor: pointer;
@@ -54,17 +54,19 @@
 }
 
 .card-title {
-  font-family: "Google Sans Medium";
+  font-family: var(--font-display);
   font-size: 23px;
   margin-left: 10px;
+  font-weight: 500;
 }
 
 .card-subtitle {
-  font-family: "Google Sans Medium";
+  font-family: var(--font-display);
   font-size: 18px;
   margin-top: 7px;
   margin-bottom: 5px;
   margin-left: 10px;
+  font-weight: 500;
 }
 
 .body-header {
@@ -83,10 +85,11 @@
   width: 20%;
 }
 .duration {
-  font-family: "Google Sans Regular";
+  font-family: var(--font-text);
   font-size: 16px;
   padding-right: 10px;
   float: right;
+  font-weight: 400;
 }
 
 .body-content {
@@ -100,7 +103,8 @@
 .content-list {
   padding-left: 10px;
   padding-right: 10px;
-  font-family: "Google Sans Regular";
+  font-family: var(--font-text);
+  font-weight: 400;
 }
 
 @media (max-width: 768px) {

@@ -3,9 +3,11 @@
 }
 
 .cs-body {
-  max-width: 760px;
+  max-width: 720px;
   margin: 0 auto;
   padding: 40px 24px 80px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── Back / nav links ─────────────────────────────────────── */
@@ -14,7 +16,8 @@
   display: inline-block;
   text-decoration: none;
   font-size: 14px;
-  font-family: "Google Sans Medium", Arial, sans-serif;
+  font-weight: 500;
+  font-family: var(--font-display);
   transition: opacity 0.18s;
 }
 
@@ -38,24 +41,25 @@
 }
 
 .cs-title {
-  font-size: 42px;
-  font-weight: 400;
-  font-family: "Google Sans Medium", Arial, sans-serif;
-  line-height: 1.15;
-  margin: 0 0 10px;
+  font-size: 40px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  line-height: 1.12;
+  letter-spacing: -0.8px;
+  margin: 0 0 12px;
 }
 
 .cs-tagline {
-  font-size: 19px;
-  line-height: 1.5;
+  font-size: 18px;
+  line-height: 1.55;
   margin: 0 0 12px;
-  font-family: "Google Sans Regular", Arial, sans-serif;
+  font-family: var(--font-text);
 }
 
 .cs-meta {
   font-size: 14px;
   margin: 0;
-  font-family: "Google Sans Regular", Arial, sans-serif;
+  font-family: var(--font-text);
   opacity: 0.85;
 }
 
@@ -74,7 +78,7 @@
   border-radius: 5px;
   font-size: 14px;
   font-weight: 700;
-  font-family: "Google Sans Regular", Arial, sans-serif;
+  font-family: var(--font-text);
   border: 1.5px solid transparent;
   transition: opacity 0.18s;
 }
@@ -97,12 +101,13 @@
 }
 
 .cs-highlight {
-  padding: 16px 18px;
+  padding: 15px 17px;
   border-radius: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.4;
-  font-family: "Google Sans Medium", Arial, sans-serif;
+  font-size: 14.5px;
+  font-weight: 500;
+  line-height: 1.45;
+  font-family: var(--font-display);
+  letter-spacing: -0.1px;
 }
 
 /* ── Sections ─────────────────────────────────────────────── */
@@ -112,17 +117,18 @@
 }
 
 .cs-section-title {
-  font-size: 21px;
-  font-weight: 500;
-  font-family: "Google Sans Medium", Arial, sans-serif;
-  margin: 0 0 12px;
+  font-size: 19px;
+  font-weight: 700;
+  font-family: var(--font-display);
+  letter-spacing: -0.3px;
+  margin: 0 0 10px;
 }
 
 .cs-text {
-  font-size: 16px;
-  line-height: 1.75;
-  margin: 0 0 14px;
-  font-family: "Google Sans Regular", Arial, sans-serif;
+  font-size: 15.5px;
+  line-height: 1.72;
+  margin: 0 0 15px;
+  font-family: var(--font-text);
 }
 
 .cs-text:last-child {
@@ -148,7 +154,8 @@
   }
 
   .cs-title {
-    font-size: 30px;
+    font-size: 29px;
+    letter-spacing: -0.5px;
   }
 
   .cs-tagline {

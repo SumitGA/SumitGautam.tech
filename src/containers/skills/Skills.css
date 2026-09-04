@@ -5,8 +5,9 @@
 .skills-header {
   font-size: 60px;
   line-height: 1.1;
-  font-family: "Google Sans Regular";
+  font-family: var(--font-display);
   text-align: center;
+  font-weight: 500;
 }
 
 .skills-text {
@@ -17,7 +18,7 @@
   margin-left: 50px;
   margin-top: 3%;
   padding-top: 80px;
-  font-family: "Google Sans Regular";
+  font-family: var(--font-text);
 }
 
 .skills-main-div > * {
@@ -36,7 +37,7 @@
   font-weight: 400;
   text-align: center;
   padding-bottom: 10px;
-  font-family: "Google Sans Regular";
+  font-family: var(--font-display);
 }
 
 /* Media Query */

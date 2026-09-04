@@ -1,10 +1,47 @@
-.footer-text {
+.footer-div {
+  margin-top: 4rem;
+  padding: 26px 16px 30px;
   text-align: center;
-  /* color: #868e96; */
-  font-weight: bold;
-  font-family: "Google Sans Regular";
+  /* Hairline that reads on both themes without hardcoding a colour */
+  border-top: 1px solid rgba(128, 128, 128, 0.18);
 }
 
-.footer-div {
-  margin-top: 2rem;
+/* The sentence stays quiet — it's a closing line, not a statement */
+.footer-text {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  line-height: 1.6;
+}
+
+/* The name carries the brand, echoing the header wordmark's tracking */
+.footer-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 14.5px;
+  letter-spacing: 0.7px;
+  white-space: nowrap;
+}
+
+.footer-heart {
+  display: inline-block;
+  font-size: 13px;
+  vertical-align: baseline;
+}
+
+@media (max-width: 768px) {
+  .footer-div {
+    margin-top: 3rem;
+    padding: 22px 14px 26px;
+  }
+
+  .footer-text {
+    font-size: 13px;
+  }
+
+  .footer-name {
+    font-size: 13.5px;
+  }
 }
