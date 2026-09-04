@@ -31,18 +31,17 @@ export function Providers({ children, siteData }) {
     localStorage.setItem("theme", name);
   }
 
+  const theme = themes[themeName];
+
   return (
     <SiteDataCtx.Provider value={siteData}>
-      <ThemeCtx.Provider value={{ theme: themes[themeName], setTheme }}>
+      <ThemeCtx.Provider value={{ theme, setTheme }}>
         {/* styled-components v5 ThemeProvider calls React.Children.only, so it
-            must receive exactly one child — the fragment supplies that. Passing
-            <GlobalStyles /> and {children} as siblings throws intermittently. */}
-        <ThemeProvider theme={themes[themeName]}>
-          <>
-            <GlobalStyles />
-            {children}
-          </>
-        </ThemeProvider>
+            must receive exactly one child. GlobalStyles therefore sits outside
+            it and takes the theme as an explicit prop rather than via context —
+            a sibling here, not a second child. */}
+        <GlobalStyles theme={theme} />
+        <ThemeProvider theme={theme}>{children}</ThemeProvider>
       </ThemeCtx.Provider>
     </SiteDataCtx.Provider>
   );
