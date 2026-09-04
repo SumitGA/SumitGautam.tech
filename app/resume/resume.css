@@ -13,6 +13,23 @@
   padding-bottom: 60px;
 }
 
+/* This area stays light in both themes so the CV card reads as a document.
+   The footer inside it takes its colours from the active theme, so in dark
+   mode the name renders white on light grey and disappears. Override with
+   document-appropriate colours — !important is needed because the component
+   sets these inline. */
+.resume-content-area .footer-text {
+  color: #555 !important;
+}
+
+.resume-content-area .footer-name {
+  color: #1a1a1a !important;
+}
+
+.resume-content-area .footer-div {
+  border-top-color: rgba(0, 0, 0, 0.12);
+}
+
 /* Download toolbar */
 .resume-toolbar {
   display: flex;
