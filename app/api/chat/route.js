@@ -267,12 +267,29 @@ GUIDELINES
   }
 
   if (projects?.data?.length) {
-    parts.push(
-      "=== PROJECTS ===\n" +
-        projects.data
-          .map((p) => `${p.name}: ${p.description || "(no description)"}`)
-          .join("\n")
-    );
+    const rendered = projects.data
+      .map((p) => {
+        // Projects with a written case study contribute their full detail, and
+        // the bot can point visitors at the page.
+        if (!p.hasCaseStudy) {
+          return `${p.name}: ${p.description || "(no description)"}`;
+        }
+        return [
+          `${p.name}${p.tagline ? ` — ${p.tagline}` : ""}`,
+          [p.role, p.timeframe].filter(Boolean).join(" · "),
+          p.problem && `Problem: ${p.problem}`,
+          p.approach && `What he built: ${p.approach}`,
+          p.outcome && `Outcome: ${p.outcome}`,
+          p.highlights?.length && `Highlights: ${p.highlights.join(" · ")}`,
+          p.stack_line && `Stack: ${p.stack_line}`,
+          `Case study page: /projects/${p.slug}`,
+        ]
+          .filter(Boolean)
+          .join("\n");
+      })
+      .join("\n\n");
+
+    parts.push(`=== PROJECTS ===\n${rendered}`);
   }
 
   if (greeting?.subTitle) {

@@ -1,0 +1,161 @@
+.cs-main {
+  width: 100%;
+}
+
+.cs-body {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* ── Back / nav links ─────────────────────────────────────── */
+
+.cs-back {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: "Google Sans Medium", Arial, sans-serif;
+  transition: opacity 0.18s;
+}
+
+.cs-back:hover {
+  opacity: 0.7;
+}
+
+.cs-footer-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(128, 128, 128, 0.22);
+}
+
+/* ── Header ───────────────────────────────────────────────── */
+
+.cs-header {
+  margin: 24px 0 32px;
+}
+
+.cs-title {
+  font-size: 42px;
+  font-weight: 400;
+  font-family: "Google Sans Medium", Arial, sans-serif;
+  line-height: 1.15;
+  margin: 0 0 10px;
+}
+
+.cs-tagline {
+  font-size: 19px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  font-family: "Google Sans Regular", Arial, sans-serif;
+}
+
+.cs-meta {
+  font-size: 14px;
+  margin: 0;
+  font-family: "Google Sans Regular", Arial, sans-serif;
+  opacity: 0.85;
+}
+
+.cs-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.cs-link-btn {
+  display: inline-block;
+  text-decoration: none;
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: "Google Sans Regular", Arial, sans-serif;
+  border: 1.5px solid transparent;
+  transition: opacity 0.18s;
+}
+
+.cs-link-btn:hover {
+  opacity: 0.85;
+}
+
+.cs-link-ghost {
+  background: transparent !important;
+}
+
+/* ── Highlight metrics ────────────────────────────────────── */
+
+.cs-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 36px;
+}
+
+.cs-highlight {
+  padding: 16px 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  font-family: "Google Sans Medium", Arial, sans-serif;
+}
+
+/* ── Sections ─────────────────────────────────────────────── */
+
+.cs-section {
+  margin-bottom: 34px;
+}
+
+.cs-section-title {
+  font-size: 21px;
+  font-weight: 500;
+  font-family: "Google Sans Medium", Arial, sans-serif;
+  margin: 0 0 12px;
+}
+
+.cs-text {
+  font-size: 16px;
+  line-height: 1.75;
+  margin: 0 0 14px;
+  font-family: "Google Sans Regular", Arial, sans-serif;
+}
+
+.cs-text:last-child {
+  margin-bottom: 0;
+}
+
+.cs-langs {
+  margin-top: 16px;
+}
+
+/* ProjectLanguages renders a centred list by default — align it left here */
+.cs-langs .dev-icons {
+  justify-content: flex-start;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* ── Mobile ───────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .cs-body {
+    padding: 28px 18px 60px;
+  }
+
+  .cs-title {
+    font-size: 30px;
+  }
+
+  .cs-tagline {
+    font-size: 17px;
+  }
+
+  .cs-highlights {
+    grid-template-columns: 1fr;
+  }
+}

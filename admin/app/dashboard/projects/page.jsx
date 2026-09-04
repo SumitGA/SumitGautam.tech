@@ -79,10 +79,24 @@ export default function ProjectsPage() {
   );
 }
 
+function slugify(s) {
+  return String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
 function ProjectCard({ project, onSave, onDelete }) {
-  const [data, setData] = useState({ ...project, languages: project.languages || [] });
+  const [data, setData] = useState({
+    ...project,
+    languages: project.languages || [],
+    highlights: project.highlights || [],
+  });
   const [open, setOpen] = useState(false);
   const [newLang, setNewLang] = useState({ name: "", iconifyClass: "" });
+  const [newHighlight, setNewHighlight] = useState("");
+
+  const set = (k) => (e) => setData((d) => ({ ...d, [k]: e.target.value }));
+
+  // Mirrors hasCaseStudy() in lib/portfolio-data.js
+  const liveCaseStudy = !!(data.slug && (data.problem || data.approach || data.outcome));
 
   function addLang() {
     if (!newLang.name.trim()) return;
@@ -94,10 +108,27 @@ function ProjectCard({ project, onSave, onDelete }) {
     setData((d) => ({ ...d, languages: d.languages.filter((_, idx) => idx !== i) }));
   }
 
+  function addHighlight() {
+    if (!newHighlight.trim()) return;
+    setData((d) => ({ ...d, highlights: [...d.highlights, newHighlight.trim()] }));
+    setNewHighlight("");
+  }
+
+  function removeHighlight(i) {
+    setData((d) => ({ ...d, highlights: d.highlights.filter((_, idx) => idx !== i) }));
+  }
+
   return (
     <div className="card" style={{ marginBottom: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }} onClick={() => setOpen(!open)}>
-        <span style={{ fontWeight: 500 }}>{data.name || "Untitled project"}</span>
+        <span style={{ fontWeight: 500 }}>
+          {data.name || "Untitled project"}
+          {liveCaseStudy && (
+            <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 700, color: "#fff", background: "#E3405F", padding: "2px 7px", borderRadius: 9 }}>
+              CASE STUDY
+            </span>
+          )}
+        </span>
         <span style={{ color: "var(--muted)", fontSize: 13 }}>{open ? "▲" : "▼"}</span>
       </div>
       {open && (
@@ -105,13 +136,83 @@ function ProjectCard({ project, onSave, onDelete }) {
           {[["name", "Project name"], ["url", "GitHub / Live URL"]].map(([k, l]) => (
             <div className="field" key={k}>
               <label>{l}</label>
-              <input value={data[k] || ""} onChange={(e) => setData((d) => ({ ...d, [k]: e.target.value }))} />
+              <input value={data[k] || ""} onChange={set(k)} />
             </div>
           ))}
           <div className="field">
             <label>Description</label>
-            <textarea value={data.description || ""} onChange={(e) => setData((d) => ({ ...d, description: e.target.value }))} />
+            <textarea value={data.description || ""} onChange={set("description")} />
           </div>
+
+          {/* ── Case study ───────────────────────────────────────────── */}
+          <div style={{ borderTop: "1px solid var(--border, #333)", margin: "20px 0 16px", paddingTop: 16 }}>
+            <h3 style={{ fontSize: 14, fontWeight: 600, margin: "0 0 4px" }}>Case study</h3>
+            <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "0 0 14px", lineHeight: 1.5 }}>
+              Needs a <strong>slug</strong> plus at least one of Problem / What I built / Outcome.
+              Once filled, the card links to <code>/projects/{data.slug || "your-slug"}</code> instead
+              of the external URL, and the site chatbot can answer questions about it.
+            </p>
+
+            <div className="field">
+              <label>Slug (URL)</label>
+              <div style={{ display: "flex", gap: 6 }}>
+                <input style={{ flex: 1 }} value={data.slug || ""} placeholder="my-project"
+                  onChange={(e) => setData((d) => ({ ...d, slug: slugify(e.target.value) }))} />
+                <button type="button" className="btn-secondary" style={{ padding: "4px 10px", flexShrink: 0 }}
+                  onClick={() => setData((d) => ({ ...d, slug: slugify(d.name || "") }))}>
+                  From name
+                </button>
+              </div>
+            </div>
+
+            {[
+              ["tagline", "Tagline (one line, shown on the card)"],
+              ["role", "Your role (e.g. Solo build, Lead engineer)"],
+              ["timeframe", "Timeframe (e.g. 2024 · 3 months)"],
+              ["stack_line", "Stack line (e.g. React · FastAPI · Postgres)"],
+              ["live_url", "Live URL (optional)"],
+              ["repo_url", "Repo URL (optional — falls back to the URL above)"],
+            ].map(([k, l]) => (
+              <div className="field" key={k}>
+                <label>{l}</label>
+                <input value={data[k] || ""} onChange={set(k)} />
+              </div>
+            ))}
+
+            {[
+              ["problem", "The problem", "What needed solving, and why it mattered."],
+              ["approach", "What I built", "The approach, architecture and key decisions."],
+              ["outcome", "Outcome", "Results, metrics, what you learned."],
+            ].map(([k, l, ph]) => (
+              <div className="field" key={k}>
+                <label>{l}</label>
+                <textarea rows={4} placeholder={ph} value={data[k] || ""} onChange={set(k)} />
+              </div>
+            ))}
+
+            <div className="field">
+              <label>Highlights (short metric callouts)</label>
+              {data.highlights.map((h, i) => (
+                <div key={i} style={{ display: "flex", gap: 6, marginBottom: 6 }}>
+                  <input style={{ flex: 1 }} value={h}
+                    onChange={(e) => {
+                      const arr = [...data.highlights]; arr[i] = e.target.value;
+                      setData((d) => ({ ...d, highlights: arr }));
+                    }} />
+                  <button type="button" className="btn-danger" style={{ padding: "4px 8px", flexShrink: 0 }}
+                    onClick={() => removeHighlight(i)}>✕</button>
+                </div>
+              ))}
+              <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
+                <input style={{ flex: 1 }} value={newHighlight} placeholder="e.g. 60% faster ingest"
+                  onChange={(e) => setNewHighlight(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addHighlight(); } }} />
+                <button type="button" className="btn-secondary" style={{ padding: "4px 10px", flexShrink: 0 }}
+                  onClick={addHighlight}>Add</button>
+              </div>
+            </div>
+          </div>
+
           <div className="field">
             <label>Languages / tech stack</label>
             {data.languages.map((lang, i) => (

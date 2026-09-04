@@ -41,9 +41,30 @@
   margin-right: 0.75rem;
 }
 
+/* Card rendered as a <Link> for projects that have a case study */
+.project-card-link {
+  display: block;
+  text-decoration: none;
+}
+
 .repo-name-div {
   display: flex;
   align-items: center;
+  gap: 10px;
+  margin-bottom: 0.75rem;
+}
+
+.repo-badge {
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  font-family: "Google Sans Medium", Arial, sans-serif;
+  flex-shrink: 0;
 }
 
 .repo-svg {
