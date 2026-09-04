@@ -34,9 +34,14 @@ export function Providers({ children, siteData }) {
   return (
     <SiteDataCtx.Provider value={siteData}>
       <ThemeCtx.Provider value={{ theme: themes[themeName], setTheme }}>
+        {/* styled-components v5 ThemeProvider calls React.Children.only, so it
+            must receive exactly one child — the fragment supplies that. Passing
+            <GlobalStyles /> and {children} as siblings throws intermittently. */}
         <ThemeProvider theme={themes[themeName]}>
-          <GlobalStyles />
-          {children}
+          <>
+            <GlobalStyles />
+            {children}
+          </>
         </ThemeProvider>
       </ThemeCtx.Provider>
     </SiteDataCtx.Provider>
