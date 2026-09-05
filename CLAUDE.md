@@ -318,12 +318,36 @@ Iconify CDN hydration mismatch, the absent analytics, and the dead CRA files.
 
 ### Portfolio (sumitgautam.tech)
 
-Deployed on Vercel. **Production branch must be `main-branch`** (not `main`) — set in Vercel project Settings → Git → Production Branch.
+Deployed on Vercel, which builds from its own GitHub integration.
 
-Push to `main-branch` to deploy:
 ```bash
 git push origin main-branch
 ```
+
+**Known problem: pushes do not reach production on their own.** Every push builds
+successfully but lands as a *Preview* deployment; production has only ever updated when
+someone clicked **Promote to Production** in the Vercel dashboard. The give-away is the
+timing — one commit sat in preview for 16 hours before appearing live, and three
+(`1f9d401`, `5e3f3c8`, `2f43316`) were never promoted at all.
+
+The expected cause is Vercel's production branch tracking something other than
+`main-branch` — likely the stale `main` branch, which still exists in the repo even
+though GitHub's default branch is `main-branch`. This is **unconfirmed**: the setting
+was not found under Settings → Git, and recent Vercel builds appear to have moved it to
+**Settings → Environments → Production → Branch Tracking**. Until it is fixed, a release
+is not live until it is promoted by hand.
+
+A more durable fix would be renaming `main-branch` to `main` so it matches Vercel's
+default behaviour, which would also retire this whole footnote.
+
+To check what actually deployed (green CI does **not** mean deployed):
+```bash
+gh api "repos/SumitGA/SumitGautam.tech/deployments?per_page=40" \
+  --jq '.[] | select(.environment|test("sumit-gautam-tech$")) | "\(.created_at)  \(.sha[0:7])  \(.environment)"' | sort
+```
+Production rows are the only ones that count. When checking the live site directly,
+follow redirects — `sumitgautam.tech` answers a bare request with a 308 and an empty
+body, so `curl` without `-L` silently reports whatever you grep for as absent.
 
 Add these environment variables in Vercel project settings:
 - `NEXT_PUBLIC_SUPABASE_URL`
@@ -335,14 +359,16 @@ Add these environment variables in Vercel project settings:
 - `GEMINI_API_KEY` (required for the chatbot)
 
 Note: GitHub Actions CI (`.github/workflows/deploy.yml`) only runs `npm run build` as a
-check — it needs the two `NEXT_PUBLIC_*` values as repo secrets, nothing else. Runtime
+check — **it never deploys anything**, so a green CI run says nothing about whether the
+change is live. It needs the two `NEXT_PUBLIC_*` values as repo secrets, nothing else. Runtime
 secrets live in Vercel. Never initialise an API client at module scope; the build
 evaluates route modules without runtime env vars and will fail (this is what broke the
 Resend route — see `app/api/contact/route.js` for the lazy-init pattern).
 
 ### Admin panel (admin.sumitgautam.tech)
 
-Separate Vercel project. Root directory set to `admin/`. Also uses `main-branch` as production branch.
+Separate Vercel project. Root directory set to `admin/`. Also tracks `main-branch`, and
+shows the same preview-only behaviour described above.
 
 Add all admin env vars listed above in that Vercel project's settings.
 
