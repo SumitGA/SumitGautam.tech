@@ -261,6 +261,32 @@ colour).
 FontAwesome is separate and still needed — `SocialMedia.js` uses `fab fa-*`
 classes from the CDN stylesheet in `app/layout.js`.
 
+### SEO
+
+`app/sitemap.js` and `app/robots.js` generate `/sitemap.xml` and `/robots.txt`.
+Static routes come from `routes` in `lib/site.js`; case study URLs are pulled
+from Supabase via `getCaseStudySlugs()`, so the sitemap regenerates hourly
+(`revalidate = 3600`) rather than freezing at build time.
+
+**Every route must declare its own `alternates.canonical`.** The root layout
+deliberately sets none. It used to default to `"/"`, which every page inherited
+unless it overrode it — so `/resume` and all five case studies told Google they
+were duplicates of the homepage, which suppresses them in search. A page that
+forgets now emits no canonical (Google infers it from the URL), which is
+recoverable; one that points at the wrong page is not.
+
+**Sitemap paths carry no trailing slash.** The site serves `/projects`, so a
+`/projects/` entry is a 308 and wastes a crawl on every URL listed.
+
+`site.url` is the non-www apex, and every canonical, `metadataBase` and sitemap
+entry derives from it. The Vercel domain configuration must therefore treat the
+apex as primary and redirect `www` to it — if `www` is primary instead, the
+crawled host and the declared canonical disagree.
+
+To check what search engines actually see, use Google Search Console (Domain
+property, verified by Cloudflare TXT record). Nothing else reports real ranking
+position.
+
 ### Analytics (`/api/analytics` + admin dashboard)
 
 First-party, self-hosted in Supabase. No third-party analytics service and no

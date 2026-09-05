@@ -4,6 +4,7 @@ import ResumeView from "./ResumeView";
 export const metadata = {
   title: "Resume",
   description: "Sumit Gautam – CV and professional experience",
+  alternates: { canonical: "/resume" },
 };
 
 export default async function ResumePage() {

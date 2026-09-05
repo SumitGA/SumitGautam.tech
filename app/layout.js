@@ -11,7 +11,11 @@ export const metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s | ${site.name}` },
   description: site.description,
-  alternates: { canonical: "/" },
+  /* No canonical here on purpose. A default of "/" is inherited by every page
+     that does not override it, which told Google that /resume and every case
+     study were duplicates of the homepage. Each route declares its own; a page
+     that forgets now emits none, which Google infers from the URL, rather than
+     one that actively points somewhere wrong. */
   openGraph: {
     type: "profile",
     siteName: site.name,
