@@ -162,7 +162,7 @@ All tables use Row Level Security (RLS):
 | `check_chat_rate_limit()` | Atomic check-and-increment, returns TRUE if allowed |
 | `prune_chat_rate_limit()` | Housekeeping — drops rows older than a day |
 
-To apply schema from scratch: run `supabase/schema.sql`, then `supabase/resume_schema.sql`, then `supabase/chat_rate_limit.sql`, then `supabase/analytics_schema.sql` in Supabase SQL Editor.
+To apply schema from scratch: run `supabase/schema.sql`, then `supabase/resume_schema.sql`, then `supabase/chat_rate_limit.sql`, then `supabase/analytics_schema.sql`, then `supabase/rate_limit.sql` in Supabase SQL Editor.
 To fix a broken RLS-only migration: run `supabase/resume_patch.sql` (idempotent — safe to re-run).
 
 ### Critical Supabase pattern
@@ -286,6 +286,56 @@ crawled host and the declared canonical disagree.
 To check what search engines actually see, use Google Search Console (Domain
 property, verified by Cloudflare TXT record). Nothing else reports real ranking
 position.
+
+### Rendering and caching
+
+**Pages are statically generated and revalidated, not server-rendered per
+request.** `app/layout.js` sets `revalidate = 60`.
+
+It previously set `dynamic = "force-dynamic"`, which meant every visitor
+triggered a serverless function running `getAllSiteData()` — roughly ten
+Supabase queries — before receiving a byte, and every response missed the CDN
+(measured: ~1.1s TTFB, `x-vercel-cache: MISS` on every request). Content comes
+from a CMS and changes rarely, so that was pure waste.
+
+The trade is that an admin edit takes up to a minute to appear. If that ever
+needs to be instant, the fix is on-demand revalidation (`revalidatePath`) from
+the admin panel rather than reverting to `force-dynamic`.
+
+Case study pages use `generateStaticParams`, so they are prerendered at build
+and refreshed on the same interval. This is also what makes a large number of
+blog-style pages viable — visitors are served from the edge and rarely touch
+Postgres at all.
+
+### Rate limiting
+
+Public endpoints share one Postgres-backed limiter: `supabase/rate_limit.sql`
+defines a `rate_limit` table keyed by `(bucket, ip)` and
+`check_rate_limit(bucket, ip, limit, window_seconds)`, called through
+`checkRateLimit()` in `lib/rate-limit.js`. Adding an endpoint means passing a
+new bucket name, not writing a migration.
+
+**In-memory counters do not work here.** Vercel spreads requests across
+instances, so a process-local `Map` limits each instance rather than each
+caller. `/api/analytics` still uses one deliberately — it is best-effort
+throttling for a high-volume endpoint where a database round trip per event
+would cost more than it saves.
+
+| Endpoint | Limit | Mechanism |
+|---|---|---|
+| `/api/contact` | 3/hour/IP (`CONTACT_RATE_LIMIT`) | `rate_limit` table, bucket `contact` |
+| `/api/chat` | 15/hour/IP (`CHAT_RATE_LIMIT`) | older `chat_rate_limit` table — still on its own function |
+| `/api/analytics` | 120/min/IP | in-memory, per-instance, best-effort |
+
+All fail **open**. If Supabase is unreachable the endpoints keep working: an
+outage is rare and brief, while failing closed would silently break the contact
+form — the site's primary conversion — for every genuine visitor during it.
+
+**`/api/contact` also has a honeypot and length caps**, so the rate limit is not
+the only defence. The honeypot is a `website` field, hidden by position rather
+than `display:none` or `type="hidden"` (bots skip those). A filled honeypot
+returns **200, not an error** — telling a bot it was detected teaches it which
+field to skip next time.
 
 ### Analytics (`/api/analytics` + admin dashboard)
 

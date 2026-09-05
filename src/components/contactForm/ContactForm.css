@@ -130,3 +130,14 @@
     font-size: 22px;
   }
 }
+
+/* Honeypot. Hidden with position rather than display:none or type="hidden" —
+   many bots skip those, which defeats the point. Off-screen, unreachable by
+   keyboard (tabIndex -1) and hidden from screen readers (aria-hidden). */
+.cf-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

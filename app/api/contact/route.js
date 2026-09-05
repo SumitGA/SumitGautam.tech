@@ -1,8 +1,36 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { checkRateLimit } from "../../../lib/rate-limit";
+
+/* Every accepted submission sends an email, so an unprotected endpoint is not
+   just noise — it burns the Resend daily quota, after which genuine enquiries
+   fail silently. Hence a rate limit, a honeypot and hard length caps. */
+const RATE_LIMIT = Number(process.env.CONTACT_RATE_LIMIT || 3);
+const RATE_WINDOW_SECONDS = Number(process.env.CONTACT_RATE_WINDOW_SECONDS || 3600);
+
+const MAX = { name: 100, email: 200, subject: 200, message: 5000 };
+
+// Deliberately permissive. Real addresses are stranger than most patterns
+// allow, and Resend rejects genuinely undeliverable ones anyway; this only
+// catches input that is obviously not an address.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function POST(req) {
-  const { name, email, subject, message } = await req.json();
+  let body;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+  }
+
+  const { name, email, subject, message, website } = body;
+
+  /* Honeypot. A field hidden from people but filled by most form bots. Answer
+     200 rather than an error: telling a bot it was detected just teaches it
+     which field to skip next time. */
+  if (typeof website === "string" && website.trim()) {
+    return NextResponse.json({ success: true });
+  }
 
   if (!name?.trim() || !email?.trim() || !message?.trim()) {
     return NextResponse.json(
@@ -11,8 +39,34 @@ export async function POST(req) {
     );
   }
 
+  if (!EMAIL_RE.test(email.trim())) {
+    return NextResponse.json({ error: "That email address looks invalid." }, { status: 400 });
+  }
+
+  for (const [field, cap] of Object.entries(MAX)) {
+    const value = body[field];
+    if (typeof value === "string" && value.length > cap) {
+      return NextResponse.json(
+        { error: `${field[0].toUpperCase()}${field.slice(1)} is too long (max ${cap} characters).` },
+        { status: 400 }
+      );
+    }
+  }
+
   if (!process.env.RESEND_API_KEY) {
     return NextResponse.json({ error: "Email service not configured." }, { status: 503 });
+  }
+
+  const allowed = await checkRateLimit(req, {
+    bucket: "contact",
+    limit: RATE_LIMIT,
+    windowSeconds: RATE_WINDOW_SECONDS,
+  });
+  if (!allowed) {
+    return NextResponse.json(
+      { error: "You've sent several messages already. Please try again later." },
+      { status: 429 }
+    );
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY);

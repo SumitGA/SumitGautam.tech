@@ -3,7 +3,9 @@ import { useState } from "react";
 import "./ContactForm.css";
 import { track } from "../../../lib/analytics-client";
 
-const INITIAL = { name: "", email: "", subject: "", message: "" };
+/* `website` is the honeypot — hidden from people, filled by most form bots.
+   Kept in the same state object so it posts with everything else. */
+const INITIAL = { name: "", email: "", subject: "", message: "", website: "" };
 
 export default function ContactForm({ theme }) {
   const [fields, setFields] = useState(INITIAL);
@@ -51,6 +53,18 @@ export default function ContactForm({ theme }) {
         </div>
       ) : (
         <form className="cf-form" onSubmit={handleSubmit} noValidate>
+          <div className="cf-hp" aria-hidden="true">
+            <label htmlFor="cf-website">Website</label>
+            <input
+              id="cf-website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={fields.website}
+              onChange={set("website")}
+            />
+          </div>
           <div className="cf-row cf-row-2">
             <div className="cf-field">
               <label className="cf-label" style={{ color: theme?.text }}>

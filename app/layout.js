@@ -5,7 +5,15 @@ import StyledComponentsRegistry from "./styled-registry";
 import AnalyticsTracker from "./AnalyticsTracker";
 import "./globals.css";
 
-export const dynamic = "force-dynamic";
+/* Content comes from a CMS and changes rarely, so rendering every page on
+   every request was pure waste: each visitor triggered a serverless function
+   and roughly ten Supabase queries before receiving a byte, and every response
+   missed the CDN cache (~1.1s TTFB measured).
+
+   Revalidating instead means pages are served from the edge and the database
+   is touched at most once a minute per page. An admin edit takes up to a
+   minute to appear, which is the trade. */
+export const revalidate = 60;
 
 export const metadata = {
   metadataBase: new URL(site.url),
