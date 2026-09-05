@@ -10,6 +10,7 @@ npm run dev        # Development server (http://localhost:3000)
 npm run build      # Production build
 npm run start      # Start production server locally
 npm run lint       # Lint (currently a no-op)
+npm run check:icons # Validate every Iconify name in Supabase + fallback
 ```
 
 Admin panel (separate Next.js 15 project in `admin/`):
@@ -220,6 +221,46 @@ async function saveData() {
 - `export const maxDuration = 60` — Vercel's default would kill a slow first token.
 - Rate limiting fails **open**: if Supabase is unreachable the chat still works.
 
+### Icons
+
+Rendered by `AppIcon` (`src/components/icon/`), a thin wrapper over
+`@iconify/react` v6. Two consumers: `SoftwareSkill` (skills) and
+`ProjectLanguages` (project cards + case studies).
+
+Icon names are content, not code — they live in Supabase
+(`skill_sections.software_skills[].fontAwesomeClassname` and
+`projects.languages[].iconifyClass`) with static fallbacks in `src/portfolio.js`.
+
+**Name format:** Iconify 3+ requires `collection:name` (`logos:react`). The
+Iconify 1.x CDN script this replaced also accepted dash notation
+(`logos-react`), and legacy names still sit in Supabase, so
+`normalizeIconName()` in `src/components/icon/icon-name.mjs` converts them on
+the way in. Prefer the colon form for anything new.
+
+**A name that does not resolve renders nothing** — no error, no warning, just a
+gap. That is how `simple-icons:java` and `simple-icons:node-dot-js` sat broken
+in production unnoticed. Two guards:
+
+```bash
+npm run check:icons   # validates every name in Supabase + fallback, exits 1 on failure
+```
+
+and `AppIcon`'s `fallback` placeholder, which holds the icon's space so an
+unresolved name leaves a visible gap rather than collapsing silently.
+
+When checking a name against the Iconify API by hand, note that the API echoes
+**unknown** names back in a `not_found` array — presence in the response body
+is not proof the icon exists. Only the `icons` and `aliases` keys are.
+
+Two names needed replacing when this was written: `simple-icons:node-dot-js` →
+`simple-icons:nodedotjs` (renamed upstream) and `simple-icons:java` →
+`cib:java` (dropped from simple-icons over Oracle's trademark policy; `cib:`
+chosen over `logos:` because it is monochrome and so respects the configured
+colour).
+
+FontAwesome is separate and still needed — `SocialMedia.js` uses `fab fa-*`
+classes from the CDN stylesheet in `app/layout.js`.
+
 ### Admin panel (`admin/`)
 
 - Separate Next.js 15 project deployed to `admin.sumitgautam.tech` on a separate Vercel project
@@ -234,7 +275,7 @@ Versioned with **standard SemVer** (`MAJOR.MINOR.PATCH`), tagged as `vX.Y.Z`.
 
 | Bump | When | Example |
 |---|---|---|
-| PATCH `1.0.1` | Bug fixes, no new capability | Fix the Iconify hydration mismatch |
+| PATCH `1.0.1` | Bug fixes, no new capability | Fix the resume footer in dark mode |
 | MINOR `1.1.0` | New feature, nothing breaks | Add an analytics dashboard |
 | MAJOR `2.0.0` | Breaking change | Rarely applicable to this site |
 
@@ -255,11 +296,20 @@ git push origin main-branch
 git push origin v1.0.1
 ```
 
-Then on GitHub: **Releases → Draft a new release →** pick the existing tag. The
-annotated tag message pre-fills the notes.
+Then publish the GitHub release from the annotated tag:
 
-`gh` CLI is **not installed** on this machine, so releases are published through
-the web UI. `brew install gh` would allow `gh release create` instead.
+```bash
+# The tag message is the release notes — reuse it rather than retyping
+git tag -l -n99 v1.0.2 | tail -n +2 | sed 's/^    //' > /tmp/notes.md
+gh release create v1.0.2 --title "v1.0.2" --notes-file /tmp/notes.md
+```
+
+`gh release edit <tag> --notes-file ...` fixes notes on an existing release —
+`v1.0.0` still carries GitHub's auto-generated PR list rather than its tag
+message.
+
+Without `gh`, the same thing works through **Releases → Draft a new release →**
+pick the existing tag; the annotated tag message pre-fills the notes.
 
 Release notes should carry a **Known issues** section — `v1.0.0` documents the
 Iconify CDN hydration mismatch, the absent analytics, and the dead CRA files.

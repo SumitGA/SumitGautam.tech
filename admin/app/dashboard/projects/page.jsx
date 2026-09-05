@@ -222,7 +222,7 @@ function ProjectCard({ project, onSave, onDelete }) {
                     const arr = [...data.languages]; arr[i] = { ...arr[i], name: e.target.value };
                     setData((d) => ({ ...d, languages: arr }));
                   }} />
-                <input style={{ flex: 2 }} value={lang.iconifyClass} placeholder="Iconify class (e.g. logos-react)"
+                <input style={{ flex: 2 }} value={lang.iconifyClass} placeholder="Iconify class (e.g. logos:react)"
                   onChange={(e) => {
                     const arr = [...data.languages]; arr[i] = { ...arr[i], iconifyClass: e.target.value };
                     setData((d) => ({ ...d, languages: arr }));

@@ -55,7 +55,7 @@ const skills = {
         },
         {
           skillName: "CSS3",
-          fontAwesomeClassname: "fa-css3",
+          fontAwesomeClassname: "fa:css3",
           style: {
             color: "#1572B6",
           },
@@ -91,7 +91,7 @@ const skills = {
         },
         {
           skillName: "NodeJS",
-          fontAwesomeClassname: "simple-icons:node-dot-js",
+          fontAwesomeClassname: "simple-icons:nodedotjs",
           style: {
             color: "#339933",
           },
@@ -126,7 +126,7 @@ const skills = {
         },
         {
           skillName: "Java",
-          fontAwesomeClassname: "simple-icons:java",
+          fontAwesomeClassname: "cib:java",
           style: {
             color: "#f89820",
           },
@@ -521,19 +521,19 @@ const projects = {
       languages: [
         {
           name: "Solidity",
-          iconifyClass: "logos-solidity",
+          iconifyClass: "logos:solidity",
         },
         {
           name: "NodeJS",
-          iconifyClass: "logos-nodejs",
+          iconifyClass: "logos:nodejs",
         },
         {
           name: "React",
-          iconifyClass: "logos-react",
+          iconifyClass: "logos:react",
         },
         {
           name: "Javascript",
-          iconifyClass: "logos-javascript",
+          iconifyClass: "logos:javascript",
         },
       ],
     },
@@ -554,11 +554,11 @@ const projects = {
         },
         {
           name: "Javascript",
-          iconifyClass: "logos-javascript",
+          iconifyClass: "logos:javascript",
         },
         {
           name: "Firebase",
-          iconifyClass: "logos-firebase",
+          iconifyClass: "logos:firebase",
         },
       ],
     },
@@ -571,11 +571,11 @@ const projects = {
       languages: [
         {
           name: "Ruby",
-          iconifyClass: "logos-ruby",
+          iconifyClass: "logos:ruby",
         },
         {
           name: "Ruby on Rails",
-          iconifyClass: "logos-rails",
+          iconifyClass: "logos:rails",
         },
         {
           name: "ERB",
@@ -600,7 +600,7 @@ const projects = {
         },
         {
           name: "ReactJs",
-          iconifyClass: "logos-react",
+          iconifyClass: "logos:react",
         },
         {
           name: "Typescript",
@@ -608,7 +608,7 @@ const projects = {
         },
         {
           name: "NodeJS",
-          iconifyClass: "logos-nodejs",
+          iconifyClass: "logos:nodejs",
         },
       ],
     },
@@ -621,7 +621,7 @@ const projects = {
       languages: [
         {
           name: "JavaScript",
-          iconifyClass: "logos-javascript",
+          iconifyClass: "logos:javascript",
         },
         {
           name: "NodeJS",
@@ -633,11 +633,11 @@ const projects = {
         },
         {
           name: "Kubernetes",
-          iconifyClass: "logos-kubernetes",
+          iconifyClass: "logos:kubernetes",
         },
         {
           name: "MongoDB",
-          iconifyClass: "logos-mongodb",
+          iconifyClass: "logos:mongodb",
         },
       ],
     },
@@ -657,7 +657,7 @@ const projects = {
         },
         {
           name: "React",
-          iconifyClass: "logos-react",
+          iconifyClass: "logos:react",
         },
       ],
     },
@@ -678,7 +678,7 @@ const projects = {
         },
         {
           name: "JavaScript",
-          iconifyClass: "logos-javascript",
+          iconifyClass: "logos:javascript",
         },
         {
           name: "SCSS",

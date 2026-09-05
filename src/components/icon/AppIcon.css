@@ -1,0 +1,11 @@
+/* Occupies exactly the space the icon will take (icons render at 1em), so the
+   surrounding row never reflows. Uses currentColor at low opacity so it reads
+   as a placeholder in both themes and picks up the per-skill colour. */
+.app-icon-fallback {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.12em;
+  background: currentColor;
+  opacity: 0.14;
+}

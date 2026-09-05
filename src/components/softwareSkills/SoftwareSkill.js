@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import AppIcon from "../icon/AppIcon";
 import "./SoftwareSkill.css";
 
 function SoftwareSkill(props) {
@@ -8,12 +9,11 @@ function SoftwareSkill(props) {
       <ul className="dev-icons">
         {props.logos.map((logo, i) => (
           <li key={`${logo.skillName}-${i}`} className="software-skill-inline" title={logo.skillName}>
-            <span
-              className="iconify"
-              data-icon={logo.fontAwesomeClassname}
+            <AppIcon
+              name={logo.fontAwesomeClassname}
               style={logo.style}
-              data-inline="false"
-            ></span>
+              label={logo.skillName}
+            />
           </li>
         ))}
       </ul>
