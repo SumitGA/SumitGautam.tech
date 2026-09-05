@@ -298,9 +298,27 @@ Supabase queries — before receiving a byte, and every response missed the CDN
 (measured: ~1.1s TTFB, `x-vercel-cache: MISS` on every request). Content comes
 from a CMS and changes rarely, so that was pure waste.
 
-The trade is that an admin edit takes up to a minute to appear. If that ever
-needs to be instant, the fix is on-demand revalidation (`revalidatePath`) from
-the admin panel rather than reverting to `force-dynamic`.
+**Edits appear immediately, via push not polling.** The admin panel POSTs to
+`/api/revalidate` on the portfolio after every successful save, which calls
+`revalidatePath("/", "layout")`. The `revalidate = 3600` window is the safety
+net for when that push does not land, not the mechanism.
+
+The call chain is admin browser → `admin/app/api/revalidate` → portfolio
+`/api/revalidate`. The proxy exists so `REVALIDATE_SECRET` stays server-side;
+calling the portfolio directly from the admin's browser would ship the secret
+to the client and need CORS on the public site. The portfolio endpoint compares
+the secret with `timingSafeEqual` over SHA-256 digests, so the comparison runs
+on equal-length buffers and the length itself does not leak.
+
+The trigger lives in `useToast`, not in each save handler. There are nearly
+thirty success paths across nine admin pages in three different shapes, and a
+missed one is a silent bug — content saves, the site keeps serving the old
+page, and nothing says why. Hooking the toast covers every existing save and
+any page added later. Pass `show(msg, "success", { revalidate: false })` if a
+success toast ever stops meaning "content changed".
+
+If `REVALIDATE_SECRET` is unset the admin still saves normally; the push
+reports `revalidated: false` and the site falls back to the hourly window.
 
 Case study pages use `generateStaticParams`, so they are prerendered at build
 and refreshed on the same interval. This is also what makes a large number of

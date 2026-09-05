@@ -11,9 +11,10 @@ import "./globals.css";
    missed the CDN cache (~1.1s TTFB measured).
 
    Revalidating instead means pages are served from the edge and the database
-   is touched at most once a minute per page. An admin edit takes up to a
-   minute to appear, which is the trade. */
-export const revalidate = 60;
+   is touched rarely. The window is long because it is not what makes edits
+   appear — the admin panel pushes an invalidation to /api/revalidate on every
+   save. This is the safety net for when that push does not land. */
+export const revalidate = 3600;
 
 export const metadata = {
   metadataBase: new URL(site.url),
