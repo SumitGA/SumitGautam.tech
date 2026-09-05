@@ -2,6 +2,7 @@
 import Header from "../../src/components/header/Header";
 import Footer from "../../src/components/footer/Footer";
 import "./resume.css";
+import { track } from "../../lib/analytics-client";
 
 export default function ResumeView({ data }) {
   if (!data) return null;
@@ -17,6 +18,7 @@ export default function ResumeView({ data }) {
   } = data;
 
   function handlePrint() {
+    track("resume_print");
     window.print();
   }
 

@@ -4,10 +4,25 @@ import Header from "../../../src/components/header/Header";
 import Footer from "../../../src/components/footer/Footer";
 import ProjectLanguages from "../../../src/components/projectLanguages/ProjectLanguages";
 import { useAppTheme } from "../../providers";
+import { useEffect, useRef } from "react";
+import { track } from "../../../lib/analytics-client";
 import "./case-study.css";
 
 export default function CaseStudyView({ project }) {
   const { theme } = useAppTheme();
+
+  /* The pageview already records the path; this counts case-study engagement
+     as its own conversion so it can be compared against contact and resume.
+     The ref guards against firing twice for one slug: React StrictMode
+     double-invokes effects in dev, and dev writes to the same Supabase as
+     production, so without this every local visit inflates the real count. */
+  const trackedSlug = useRef(null);
+  useEffect(() => {
+    const slug = project?.slug;
+    if (!slug || trackedSlug.current === slug) return;
+    trackedSlug.current = slug;
+    track("case_study_view", { meta: { slug } });
+  }, [project?.slug]);
 
   const {
     name,

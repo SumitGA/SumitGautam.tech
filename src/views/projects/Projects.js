@@ -8,6 +8,7 @@ import "./Projects.css";
 import ProjectsImg from "./ProjectsImg";
 import { useAppTheme } from "../../../app/providers";
 import { useSiteData } from "../../../app/providers";
+import { track } from "../../../lib/analytics-client";
 
 export default function Projects() {
   const { theme } = useAppTheme();
@@ -44,6 +45,7 @@ export default function Projects() {
           href="https://github.com/SumitGA"
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => track("outbound_click", { meta: { target: "github-profile" } })}
           style={{ backgroundColor: theme.accentBright }}
         >
           <FaGithub />

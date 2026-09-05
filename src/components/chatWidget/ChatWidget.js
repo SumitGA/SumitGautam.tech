@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
 import "./ChatWidget.css";
+import { track } from "../../../lib/analytics-client";
 
 const STARTERS = [
   "What's Sumit's experience with Rust?",
@@ -31,6 +32,8 @@ function ChatWidget(props) {
   async function send(text) {
     const trimmed = text.trim();
     if (!trimmed || isLoading) return;
+
+    track("chat_message");
 
     const history = [...messages, { role: "user", content: trimmed }];
     // Add the empty assistant bubble up front so the typing indicator is
@@ -188,7 +191,10 @@ function ChatWidget(props) {
 
       <button
         className="chat-bubble"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (!isOpen) track("chat_open");
+          setIsOpen(!isOpen);
+        }}
         style={{ backgroundColor: theme.accentColor }}
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import "./ContactForm.css";
+import { track } from "../../../lib/analytics-client";
 
 const INITIAL = { name: "", email: "", subject: "", message: "" };
 
@@ -27,6 +28,7 @@ export default function ContactForm({ theme }) {
     const data = await res.json();
     if (res.ok) {
       setStatus("success");
+      track("contact_submit");
       setFields(INITIAL);
     } else {
       setStatus("error");

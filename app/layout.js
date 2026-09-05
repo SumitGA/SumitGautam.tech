@@ -2,6 +2,7 @@ import { site } from "../lib/site";
 import { getAllSiteData } from "../lib/portfolio-data";
 import { Providers } from "./providers";
 import StyledComponentsRegistry from "./styled-registry";
+import AnalyticsTracker from "./AnalyticsTracker";
 import "./globals.css";
 
 export const dynamic = "force-dynamic";
@@ -65,6 +66,7 @@ export default async function RootLayout({ children }) {
         <StyledComponentsRegistry>
           <Providers siteData={siteData}>{children}</Providers>
         </StyledComponentsRegistry>
+        <AnalyticsTracker />
       </body>
     </html>
   );

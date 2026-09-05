@@ -162,7 +162,7 @@ All tables use Row Level Security (RLS):
 | `check_chat_rate_limit()` | Atomic check-and-increment, returns TRUE if allowed |
 | `prune_chat_rate_limit()` | Housekeeping — drops rows older than a day |
 
-To apply schema from scratch: run `supabase/schema.sql`, then `supabase/resume_schema.sql`, then `supabase/chat_rate_limit.sql` in Supabase SQL Editor.
+To apply schema from scratch: run `supabase/schema.sql`, then `supabase/resume_schema.sql`, then `supabase/chat_rate_limit.sql`, then `supabase/analytics_schema.sql` in Supabase SQL Editor.
 To fix a broken RLS-only migration: run `supabase/resume_patch.sql` (idempotent — safe to re-run).
 
 ### Critical Supabase pattern
@@ -260,6 +260,78 @@ colour).
 
 FontAwesome is separate and still needed — `SocialMedia.js` uses `fab fa-*`
 classes from the CDN stylesheet in `app/layout.js`.
+
+### Analytics (`/api/analytics` + admin dashboard)
+
+First-party, self-hosted in Supabase. No third-party analytics service and no
+cookies.
+
+**Pipeline**
+
+1. `app/AnalyticsTracker.jsx` (mounted in the root layout) records one
+   `pageview` per route change.
+2. Conversions call `track()` from `lib/analytics-client.js` directly.
+3. Both POST to `app/api/analytics/route.js`, which inserts into
+   `analytics_events` using the **service role**.
+4. The admin dashboard (`admin/app/dashboard/analytics/`) reads aggregates
+   through Postgres functions, never the raw table.
+
+**Why ingest goes through an API route:** `analytics_events` has no INSERT
+policy on purpose. The anon key is public, so if it could write, anyone could
+forge events. The route is therefore the only ingest path, which also gives one
+place to filter bots and rate limit.
+
+**What is and is not stored.** The IP address is read to rate limit and is
+never written. The user agent is reduced to a device class and browser name,
+then discarded. `visitor_id` and `session_id` are random UUIDs minted in the
+browser (localStorage and sessionStorage) — not derived from anything about the
+visitor, not a cookie, not shared across sites. Referrers are truncated to the
+host so query strings from other people's sites are not captured.
+
+Because identity lives in localStorage, a visitor who blocks storage or clears
+it looks new again. That is the accuracy cost of not fingerprinting, and it is
+the intended trade.
+
+**Consent — read before assuming this needs no banner.** No cookies are set, but
+an identifier *is* written to localStorage, and under a strict ePrivacy reading
+that is not "strictly necessary" and would require consent in the EU. The
+position taken here is that first-party, non-profiling, non-shared measurement
+on a personal portfolio is low risk. If that is not good enough, the alternative
+is the Plausible model: drop client-side storage entirely and derive
+`visitor_id` server-side from a salted hash of IP and user agent, rotating the
+salt daily. That needs no consent under any reading, at the cost of returning
+visitors and retention — a daily-rotating salt makes the same person
+unrecognisable tomorrow. Retention is the reason this build stores an id.
+
+**The endpoint must never affect the visitor.** Every failure path returns 204,
+including a missing table, a bad payload, or no service-role key. Analytics
+breaking should cost data, not a working site. `track()` likewise swallows
+everything and uses `keepalive` so outbound-click events survive the navigation
+that follows them.
+
+**Conversions tracked:** `contact_submit`, `resume_print`, `chat_open`,
+`chat_message`, `outbound_click`, `case_study_view`. The allowlist in the route
+must be updated before a new event name will be accepted — unknown events are
+dropped silently.
+
+**Aggregation functions** (all in `supabase/analytics_schema.sql`, all granted
+to `authenticated` only):
+
+| Function | Returns |
+|---|---|
+| `analytics_overview(days)` | Visitors, sessions, pageviews, new vs returning, bounce rate, pages/session, plus the previous window for deltas |
+| `analytics_timeseries(days)` | Daily series, gap-filled so charts have no holes |
+| `analytics_breakdown(dimension, days, limit)` | Top N by path, referrer, country, device or browser. The dimension is checked against a fixed list before it reaches dynamic SQL |
+| `analytics_conversions(days)` | Per-event totals and rate against sessions |
+| `analytics_retention(weeks)` | Weekly cohorts by first-ever visit. Offset 0 is always 100%. A cohort only emits rows for weeks it was active, so absent cells are genuinely zero |
+| `prune_analytics_events()` | Drops events older than a year |
+
+Charts in the dashboard are hand-rolled SVG — a charting library would be the
+largest dependency in the admin app, for six panels.
+
+To install: run `supabase/analytics_schema.sql` in the Supabase SQL Editor.
+Requires `SUPABASE_SERVICE_ROLE_KEY` in the portfolio's Vercel project (already
+needed for chat rate limiting).
 
 ### Admin panel (`admin/`)
 

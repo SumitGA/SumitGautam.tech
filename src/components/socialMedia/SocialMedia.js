@@ -2,13 +2,23 @@
 import React from "react";
 import "./SocialMedia.css";
 import { useSiteData } from "../../../app/providers";
+import { track } from "../../../lib/analytics-client";
 
 export default function SocialMedia() {
   const { socialMediaLinks } = useSiteData() || {};
   if (!socialMediaLinks) return null;
 
+  /* Delegated rather than an onClick per anchor — there are seven, and the
+     network name is already on the element as a class. */
+  function handleClick(e) {
+    const link = e.target.closest("a.icon-button");
+    if (!link) return;
+    const network = [...link.classList].find((c) => c !== "icon-button");
+    track("outbound_click", { meta: { target: network || "social" } });
+  }
+
   return (
-    <div className="social-media-div">
+    <div className="social-media-div" onClick={handleClick}>
       {socialMediaLinks.github && (
         <a href={socialMediaLinks.github} className="icon-button github" target="_blank" rel="noopener noreferrer">
           <i className="fab fa-github"></i><span></span>
