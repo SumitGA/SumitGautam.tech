@@ -356,6 +356,27 @@ requires a valid Supabase session; without that it would hand anyone the
 account's storage and bandwidth. Deleting a post destroys its images, but only
 those no other post references.
 
+**Images are made responsive at render time, not at authoring time.** Body
+images are bare `<img src>` in the markdown, which is the worst shape for Core
+Web Vitals — no dimensions, so every figure shoves the text down as it loads,
+and no loading hint, so images far below the fold compete with the one the
+reader can see. `rehypeResponsiveImages` in `lib/markdown.js` adds
+`loading="lazy"`, `decoding="async"`, a `srcset` at 480/720/1080/1440 and
+intrinsic `width`/`height`. It is a plugin rather than a change to how images
+are authored because the markdown has to stay portable — a full URL that
+renders in GitHub was a deliberate choice.
+
+Dimensions come from Cloudinary's `fl_getinfo`, which is a public delivery URL
+rather than the Admin API, so it needs no credentials. It runs at build and
+revalidate time only, is memoised per process, and returns null on failure —
+without dimensions the image still renders, it just does not reserve space.
+
+**The cover is the exception: eager, `fetchPriority="high"`.** It is the LCP
+element on every post, and lazy-loading the one image that has to arrive fast
+would be precisely backwards. Anything given intrinsic `width`/`height` also
+needs `height: auto` in CSS, or the attribute height wins over the scaled width
+and the image stretches — `.post-cover` sets `width: 100%` and would have.
+
 **Slugs are permanent.** `post_slugs` keeps every slug a post has ever had,
 maintained by a trigger rather than application code — a published URL is a
 promise, and an invariant that matters that much should not depend on

@@ -8,7 +8,7 @@ import {
 } from "../../../lib/blog-data";
 import { getProjectBySlug } from "../../../lib/portfolio-data";
 import { renderMarkdown, extractHeadings, readingMinutes } from "../../../lib/markdown";
-import { cloudinaryUrl } from "../../../lib/cloudinary";
+import { cloudinaryUrl, cloudinaryDimensions } from "../../../lib/cloudinary";
 import { site } from "../../../lib/site";
 import PostView from "./PostView";
 
@@ -63,13 +63,16 @@ export default async function BlogPostPage({ params }) {
     notFound();
   }
 
-  const [html, adjacent, seriesPosts, project] = await Promise.all([
+  const [html, adjacent, seriesPosts, project, coverSize] = await Promise.all([
     renderMarkdown(post.content),
     getAdjacentPosts(post.published_at),
     getSeriesPosts(post.series),
     // Returns null unless the slug names a project that actually has a case
     // study, so a link is only offered when there is a page to land on.
     getProjectBySlug(post.project_slug),
+    // The cover is the largest element above the fold, so it decides LCP. It
+    // needs dimensions to reserve space and must NOT be lazy — see PostView.
+    cloudinaryDimensions(post.cover_public_id),
   ]);
   const headings = extractHeadings(post.content);
 
@@ -101,6 +104,7 @@ export default async function BlogPostPage({ params }) {
         seriesPosts={seriesPosts}
         project={project}
         coverUrl={cloudinaryUrl(post.cover_public_id, { width: 1600 })}
+        coverSize={coverSize}
       />
     </>
   );

@@ -81,6 +81,12 @@ export default function BlogIndex({ posts, tags, activeTag }) {
                       <img
                         className="blog-item-cover"
                         src={cover}
+                        /* The transform above fixes the size, so no lookup is
+                           needed to reserve the space. */
+                        width={480}
+                        height={280}
+                        loading="lazy"
+                        decoding="async"
                         alt={post.cover_alt || ""}
                         loading="lazy"
                         width={480}

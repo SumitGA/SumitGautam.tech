@@ -27,6 +27,7 @@ export default function PostView({
   adjacent,
   seriesPosts = [],
   project = null,
+  coverSize = null,
 }) {
   const { theme } = useAppTheme();
   const proseRef = useRef(null);
@@ -139,7 +140,18 @@ export default function PostView({
         </header>
 
         {coverUrl && (
-          <img className="post-cover" src={coverUrl} alt={post.cover_alt || ""} />
+          /* Deliberately eager and high priority: this is the LCP element on
+             every post, and lazy-loading it would delay the one image that
+             actually needs to arrive fast. Body images get the opposite
+             treatment in the markdown pipeline. */
+          <img
+            className="post-cover"
+            src={coverUrl}
+            alt={post.cover_alt || ""}
+            {...(coverSize ? { width: coverSize.width, height: coverSize.height } : {})}
+            fetchPriority="high"
+            decoding="async"
+          />
         )}
 
         <PostContext

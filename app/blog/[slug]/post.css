@@ -45,6 +45,9 @@
 
 .post-cover {
   width: 100%;
+  /* Required now that the tag carries intrinsic width/height. Without it the
+     attribute height wins over the scaled width and the image stretches. */
+  height: auto;
   border-radius: 10px;
   margin: 8px 0 32px;
   background: rgba(128, 128, 128, 0.12);
