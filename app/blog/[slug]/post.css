@@ -347,3 +347,58 @@
   .post-author-actions { flex-direction: column; }
   .post-author-cta { text-align: center; }
 }
+
+/* ── Series / project context ───────────────────────────────── */
+
+.post-context {
+  margin: 0 0 32px;
+  padding: 18px 22px;
+  border-left: 3px solid rgba(128, 128, 128, 0.3);
+  background: rgba(128, 128, 128, 0.06);
+  border-radius: 0 8px 8px 0;
+}
+
+.post-context-label {
+  font-family: var(--font-display);
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+
+.post-context-parts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.post-context-parts li {
+  display: flex;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  line-height: 1.4;
+}
+.post-context-parts li.is-current { font-weight: 600; }
+.post-context-parts a { text-decoration: none; }
+.post-context-parts a:hover { text-decoration: underline; }
+
+.post-context-num {
+  font-variant-numeric: tabular-nums;
+  min-width: 14px;
+}
+
+.post-context-project {
+  font-family: var(--font-text);
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0;
+}
+.post-context-project.has-series {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(128, 128, 128, 0.22);
+}
+.post-context-project a { text-decoration: none; }
+.post-context-project a:hover { text-decoration: underline; }

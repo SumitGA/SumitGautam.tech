@@ -16,6 +16,9 @@ const EMPTY = {
   cover_alt: "",
   meta_title: "",
   meta_description: "",
+  series: "",
+  series_order: null,
+  project_slug: "",
 };
 
 /* Mirrors the slug rules a reader would expect in a URL. Generated from the
@@ -216,8 +219,30 @@ function PostEditor({ post, onClose, onSaved, show }) {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [tagInput, setTagInput] = useState("");
+  const [projects, setProjects] = useState([]);
   const contentRef = useRef(null);
   const isNew = !data.id;
+
+  /* Only projects that actually have a case study page are offered. Linking a
+     post to a project with no page would store a slug that renders nothing —
+     a silent dead end rather than a visible error. The condition mirrors
+     hasCaseStudy() on the site side. */
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data: rows } = await getSupabaseBrowser()
+        .from("projects")
+        .select("name,slug,problem,approach,outcome")
+        .order("name");
+      if (cancelled) return;
+      setProjects(
+        (rows || [])
+          .filter((r) => r.slug && (r.problem || r.approach || r.outcome))
+          .map((r) => ({ name: r.name, slug: r.slug }))
+      );
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const set = (field) => (e) =>
     setData((d) => ({ ...d, [field]: e.target.value }));
@@ -301,6 +326,11 @@ function PostEditor({ post, onClose, onSaved, show }) {
       meta_title: data.meta_title?.trim() || null,
       meta_description: data.meta_description?.trim() || null,
       reading_minutes: readingMinutes(data.content),
+      // The database requires a position whenever a series is named, so send
+      // null for both rather than an empty string that would fail the check.
+      series: data.series?.trim() || null,
+      series_order: data.series?.trim() ? Number(data.series_order) || 1 : null,
+      project_slug: data.project_slug?.trim() || null,
     };
 
     const sb = getSupabaseBrowser();
@@ -430,6 +460,43 @@ function PostEditor({ post, onClose, onSaved, show }) {
             {readingMinutes(data.content)} min read
           </span>
         </div>
+      </div>
+
+      <div className="field">
+        <label>Series — leave blank for a standalone post</label>
+        <div style={{ display: "flex", gap: 8 }}>
+          <input
+            style={{ flex: 1 }}
+            value={data.series || ""}
+            onChange={set("series")}
+            placeholder="HazShield AI"
+          />
+          <input
+            type="number"
+            min="1"
+            style={{ width: 110 }}
+            value={data.series_order ?? ""}
+            onChange={(e) =>
+              setData((d) => ({ ...d, series_order: e.target.value === "" ? null : Number(e.target.value) }))
+            }
+            placeholder="Part #"
+            disabled={!data.series?.trim()}
+          />
+        </div>
+        <p style={{ fontSize: 12, color: "var(--muted)", margin: "6px 0 0" }}>
+          Parts are listed in this order, not by date — so publishing something
+          else in between does not break the series.
+        </p>
+      </div>
+
+      <div className="field">
+        <label>Project — links this post to a case study, in both directions</label>
+        <select value={data.project_slug || ""} onChange={set("project_slug")}>
+          <option value="">None</option>
+          {projects.map((p) => (
+            <option key={p.slug} value={p.slug}>{p.name}</option>
+          ))}
+        </select>
       </div>
 
       <details style={{ marginTop: 6 }}>

@@ -214,6 +214,7 @@ All are idempotent and safe to re-run:
 5. `supabase/analytics_schema.sql` — events table and aggregation functions
 6. `supabase/rate_limit.sql` — shared limiter used by `/api/contact`
 7. `supabase/blog_schema.sql` — posts, slug history, image ownership
+8. `supabase/blog_series.sql` — series ordering and project links on posts
 To fix a broken RLS-only migration: run `supabase/resume_patch.sql` (idempotent — safe to re-run).
 
 ### Critical Supabase pattern
@@ -365,6 +366,24 @@ existed is a genuine 404.
 rather than a boolean, and the public policy is
 `status = 'published' and published_at <= now()`. A future date is simply
 invisible, with no application code involved.
+
+**Series are explicit, not chronological.** `series` + `series_order` on
+`posts` decide reading order, and previous/next stays by date — they answer
+different questions ("where am I in this set" versus "what else is there"), so
+publishing something unrelated between two parts no longer strands the series.
+A check constraint rejects a series with no position and a partial unique index
+rejects two parts claiming the same one, because an ambiguous reading order is
+exactly the failure this was built to prevent. Unpublished parts are absent
+rather than greyed out — RLS already hides them, and a link a reader cannot
+follow is worse than not knowing.
+
+**A post can name a project** via `project_slug`, which links a post to its
+case study and the case study back to its posts. There is deliberately no
+foreign key: `projects.slug` is unique only through a *partial* index (blank
+slugs are allowed for projects without a case study) and Postgres cannot back a
+foreign key with one. The slug resolves at render time through
+`getProjectBySlug()`, which returns null unless the project actually has a case
+study page — so a stale slug renders no link instead of a dead one.
 
 **Tags are real routes** (`/blog/tag/rust`), not `?tag=rust`. A query parameter
 would force the index to render dynamically on every request and gives search

@@ -5,6 +5,7 @@ import Header from "../../../src/components/header/Header";
 import Footer from "../../../src/components/footer/Footer";
 import { useAppTheme } from "../../providers";
 import AuthorCard from "../AuthorCard";
+import PostContext from "../PostContext";
 import "../blog.css";
 import "./post.css";
 
@@ -17,7 +18,16 @@ function formatDate(iso) {
   });
 }
 
-export default function PostView({ post, html, headings, readingMinutes, coverUrl, adjacent }) {
+export default function PostView({
+  post,
+  html,
+  headings,
+  readingMinutes,
+  coverUrl,
+  adjacent,
+  seriesPosts = [],
+  project = null,
+}) {
   const { theme } = useAppTheme();
   const proseRef = useRef(null);
   const [copied, setCopied] = useState(null);
@@ -131,6 +141,13 @@ export default function PostView({ post, html, headings, readingMinutes, coverUr
         {coverUrl && (
           <img className="post-cover" src={coverUrl} alt={post.cover_alt || ""} />
         )}
+
+        <PostContext
+          series={post.series}
+          seriesPosts={seriesPosts}
+          project={project}
+          currentSlug={post.slug}
+        />
 
         {headings.length > 2 && (
           <nav className="post-toc" aria-label="On this page">

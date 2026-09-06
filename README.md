@@ -178,6 +178,7 @@ Run SQL files in Supabase SQL Editor (Dashboard → SQL Editor), in order. All a
 5. `supabase/analytics_schema.sql` — analytics events and aggregation functions
 6. `supabase/rate_limit.sql` — shared rate limiter used by the contact form
 7. `supabase/blog_schema.sql` — posts, slug history and image ownership
+8. `supabase/blog_series.sql` — series ordering and project links on posts
 
 If RLS policies fail mid-run, `supabase/resume_patch.sql` is an idempotent patch that is safe to re-run.
 

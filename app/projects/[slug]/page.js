@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getProjectBySlug, getCaseStudySlugs } from "../../../lib/portfolio-data";
+import { getPostsForProject } from "../../../lib/blog-data";
 import CaseStudyView from "./CaseStudyView";
 
 export async function generateStaticParams() {
@@ -25,5 +26,9 @@ export default async function ProjectCaseStudyPage({ params }) {
 
   if (!project) notFound();
 
-  return <CaseStudyView project={project} />;
+  /* The deep dives on the same work. A case study is the summary; the posts
+     are the detail, and until now neither pointed at the other. */
+  const posts = await getPostsForProject(slug);
+
+  return <CaseStudyView project={project} posts={posts} />;
 }

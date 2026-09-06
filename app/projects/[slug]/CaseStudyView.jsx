@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 import { track } from "../../../lib/analytics-client";
 import "./case-study.css";
 
-export default function CaseStudyView({ project }) {
+export default function CaseStudyView({ project, posts = [] }) {
   const { theme } = useAppTheme();
 
   /* The pageview already records the path; this counts case-study engagement
@@ -128,6 +128,32 @@ export default function CaseStudyView({ project }) {
                 <ProjectLanguages logos={languages} />
               </div>
             )}
+          </section>
+        )}
+
+        {posts.length > 0 && (
+          <section className="cs-section">
+            <h2 className="cs-section-title" style={{ color: theme.text }}>
+              {posts.length === 1 ? "Written about this" : "The build log"}
+            </h2>
+            <ul className="cs-posts">
+              {posts.map((p) => (
+                <li key={p.slug}>
+                  <Link
+                    href={`/blog/${p.slug}`}
+                    className="cs-post-link"
+                    style={{ color: theme.text }}
+                  >
+                    {p.title}
+                  </Link>
+                  {p.excerpt && (
+                    <p className="cs-post-excerpt" style={{ color: theme.secondaryText }}>
+                      {p.excerpt}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
           </section>
         )}
 
