@@ -386,6 +386,12 @@ white — below the 4.5:1 WCAG AA requires for body text. It is now `#5F6B85`
 Body copy uses `theme.text`, not `theme.secondaryText`. A muted colour that
 reads fine on a one-line caption is tiring over a thousand words.
 
+`accentBright` (`#FC1056`) measures **3.93:1** against white — enough for large
+text, short of the 4.5:1 a button-sized label needs. `accentSolid` (`#E80F4F`)
+is the same red 8% darker at **4.55:1**, and is what should sit behind white
+text. The active tag chip on the blog index still uses `accentBright` and so
+still fails; it predates the token.
+
 ### SEO
 
 `app/sitemap.js` and `app/robots.js` generate `/sitemap.xml` and `/robots.txt`.
@@ -529,7 +535,8 @@ everything and uses `keepalive` so outbound-click events survive the navigation
 that follows them.
 
 **Conversions tracked:** `contact_submit`, `resume_print`, `chat_open`,
-`chat_message`, `outbound_click`, `case_study_view`. The allowlist in the route
+`chat_message`, `outbound_click`, `case_study_view`, `post_contact_click`,
+`post_subscribe_click`. The allowlist in the route
 must be updated before a new event name will be accepted — unknown events are
 dropped silently.
 

@@ -25,6 +25,11 @@ const EVENTS = new Set([
   "chat_message",
   "outbound_click",
   "case_study_view",
+  // The two actions offered at the end of a post. Separate names rather than
+  // one event with metadata, so the dashboard's per-event grouping shows them
+  // as distinct rows with no schema change.
+  "post_contact_click",
+  "post_subscribe_click",
 ]);
 
 const MAX_PATH = 512;

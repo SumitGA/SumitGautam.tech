@@ -283,3 +283,67 @@
   .post-nav { flex-direction: column; gap: 20px; }
   .post-nav-right { text-align: left; margin-left: 0; }
 }
+
+/* ── Author card ────────────────────────────────────────────── */
+
+.post-author {
+  margin-top: 56px;
+  padding: 24px 26px;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 12px;
+}
+
+.post-author-eyebrow {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin: 0 0 6px;
+}
+
+.post-author-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin: 0 0 6px;
+}
+
+.post-author-bio {
+  font-family: var(--font-text);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 18px;
+  max-width: 52ch;
+}
+
+.post-author-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.post-author-cta {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: opacity 0.18s, border-color 0.18s;
+}
+.post-author-cta:hover { opacity: 0.85; }
+
+.post-author-cta-secondary { background-color: transparent; }
+.post-author-cta-secondary:hover { border-color: rgba(128, 128, 128, 0.6); }
+
+/* The card sits between the article and the previous/next links, so that
+   border would double up. */
+.post-author + .post-nav { border-top: none; margin-top: 28px; padding-top: 0; }
+
+@media (max-width: 640px) {
+  .post-author { padding: 20px; }
+  .post-author-actions { flex-direction: column; }
+  .post-author-cta { text-align: center; }
+}

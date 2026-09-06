@@ -29,6 +29,15 @@ export default function BlogIndex({ posts, tags, activeTag }) {
           <p className="blog-subtitle" style={{ color: theme.secondaryText }}>
             Notes on the things that broke, and what fixed them.
           </p>
+          {/* The feed already existed and was linked from nowhere, so nobody
+              could subscribe. Plain <a>: it is a route handler, not a page. */}
+          <a
+            href="/blog/rss.xml"
+            className="blog-feed-link"
+            style={{ color: theme.secondaryText }}
+          >
+            Subscribe via RSS
+          </a>
         </header>
 
         {tags.length > 0 && (

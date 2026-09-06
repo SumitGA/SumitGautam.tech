@@ -19,7 +19,10 @@ export async function generateMetadata({ params }) {
   return {
     title: `Posts tagged ${decoded}`,
     description: `Posts tagged ${decoded}.`,
-    alternates: { canonical: `/blog/tag/${tag}` },
+    alternates: {
+      canonical: `/blog/tag/${tag}`,
+      types: { "application/rss+xml": "/blog/rss.xml" },
+    },
   };
 }
 

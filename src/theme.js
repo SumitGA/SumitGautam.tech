@@ -11,6 +11,11 @@ const lightTheme = {
   secondaryText: "#5F6B85",
   accentColor: "#E3405F",
   accentBright: "#FC1056",
+  // White on accentBright measures 3.93:1 — fine for large text, short of the
+  // 4.5:1 AA wants for button-sized labels. This is 8% darker, visually the
+  // same red, and clears it at 4.55:1. Use it wherever accent is a solid fill
+  // behind white text.
+  accentSolid: "#E80F4F",
   projectCard: "#DCE4F2",
   skinColor: "#F7B799",
   skinColor2: "#FCB696",
@@ -28,6 +33,7 @@ const darkTheme = {
   secondaryText: "#8D8D8D",
   accentColor: "#E3405F",
   accentBright: "#FC1056",
+  accentSolid: "#E80F4F",
   projectCard: "#292A2D",
   skinColor: "#F7B799",
   skinColor2: "#FCB696",

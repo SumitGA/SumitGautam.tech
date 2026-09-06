@@ -4,6 +4,7 @@ import Link from "next/link";
 import Header from "../../../src/components/header/Header";
 import Footer from "../../../src/components/footer/Footer";
 import { useAppTheme } from "../../providers";
+import AuthorCard from "../AuthorCard";
 import "../blog.css";
 import "./post.css";
 
@@ -160,6 +161,7 @@ export default function PostView({ post, html, headings, readingMinutes, coverUr
           style={{ color: theme.text }}
           dangerouslySetInnerHTML={{ __html: html }}
         />
+        <AuthorCard />
         {(adjacent?.prev || adjacent?.next) && (
           <nav className="post-nav" aria-label="More posts">
             {adjacent.next ? (

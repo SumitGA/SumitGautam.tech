@@ -20,7 +20,10 @@ export async function generateMetadata({ params }) {
   return {
     title: post.meta_title || post.title,
     description: post.meta_description || post.excerpt,
-    alternates: { canonical: `/blog/${slug}` },
+    alternates: {
+      canonical: `/blog/${slug}`,
+      types: { "application/rss+xml": "/blog/rss.xml" },
+    },
     openGraph: {
       type: "article",
       title: post.meta_title || post.title,
