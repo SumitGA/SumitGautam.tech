@@ -37,5 +37,12 @@ export async function POST(request) {
   // than mapping each admin section to the routes it affects.
   revalidatePath("/", "layout");
 
+  /* The sitemap and the feed are route handlers, not pages, so they sit
+     outside the layout tree the call above invalidates — publishing a post
+     would otherwise leave both stale until their own hour expired, which is
+     exactly the window a crawler is most useful in. */
+  revalidatePath("/sitemap.xml");
+  revalidatePath("/blog/rss.xml");
+
   return NextResponse.json({ revalidated: true, at: new Date().toISOString() });
 }
