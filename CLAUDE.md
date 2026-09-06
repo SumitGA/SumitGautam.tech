@@ -46,6 +46,17 @@ app/                   Next.js App Router pages and API routes
     route.js           POST handler — receives form data, sends email via Resend
   api/chat/
     route.js           POST handler — streams AI chat replies via Google Gemini
+  api/analytics/
+    route.js           POST handler — first-party pageview and conversion ingest
+  api/revalidate/
+    route.js           POST handler — purges the page cache when the admin saves
+  blog/                Blog index, posts, tag pages and RSS
+    page.js            Index — statically generated
+    BlogIndex.jsx      Client component for the list and tag chips
+    [slug]/            Post page, markdown rendered server-side
+    tag/[tag]/         One page per tag; real routes, not a query string
+    rss.xml/route.js   RSS feed
+  projects/[slug]/     Project case studies
 
 src/
   portfolio.js         Static fallback content (used when Supabase is unavailable)
@@ -62,6 +73,12 @@ src/
 lib/
   portfolio-data.js    Server-side Supabase fetchers with static fallbacks
   supabase.js          Supabase client factory (server + browser singletons)
+  blog-data.js         Blog fetchers — RLS does the draft/scheduled filtering
+  markdown.js          Markdown → HTML with Shiki highlighting, server-side only
+  cloudinary.js        Builds image URLs from a stored public_id
+  rate-limit.js        Shared Postgres-backed per-IP limiter
+  analytics-client.js  Client-side track() helper
+  site.js              Canonical URL, site metadata, sitemap route list
 
 admin/                 Separate Next.js 15 project for the CMS admin panel
   app/dashboard/       Admin pages: greeting, skills, experience, resume, contact, settings
@@ -104,6 +121,10 @@ GEMINI_MODEL                    (optional) default: gemini-3.1-flash-lite
 GEMINI_FALLBACK_MODEL           (optional) default: gemini-3.5-flash-lite
 CHAT_RATE_LIMIT                 (optional) messages per IP per window, default 15
 CHAT_RATE_WINDOW_SECONDS        (optional) window length, default 3600
+CONTACT_RATE_LIMIT              (optional) contact submissions per IP per hour, default 3
+CONTACT_RATE_WINDOW_SECONDS     (optional) window length, default 3600
+REVALIDATE_SECRET               Shared with the admin project — lets a save purge the cache
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME  Builds blog image URLs. Public by design
 ```
 
 Copy `.env.local.example` to `.env.local` and fill in values.
@@ -113,11 +134,24 @@ Copy `.env.local.example` to `.env.local` and fill in values.
 ```
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
-SUPABASE_SERVICE_ROLE_KEY       Service role key (server-only, never browser)
-NEXTAUTH_SECRET                 Random string for session signing
-NEXTAUTH_URL                    Full URL of admin app (e.g. https://admin.sumitgautam.tech)
-ADMIN_PASSWORD                  Password for the admin login page
+SUPABASE_SERVICE_ROLE_KEY          Service role key (server-only, never browser)
+REVALIDATE_SECRET                  Must match the portfolio's value — see Rendering and caching
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME  Same value as the portfolio; public by design
+CLOUDINARY_API_KEY                 Signs uploads; server-side only
+CLOUDINARY_API_SECRET              Server-side only — never give this a NEXT_PUBLIC_ prefix
+PORTFOLIO_URL                      (optional) defaults to https://sumitgautam.tech
 ```
+
+**Login is Supabase Auth** (`signInWithPassword` in `admin/app/login/page.jsx`),
+against a user created in the Supabase dashboard. Earlier revisions of this file
+listed `NEXTAUTH_SECRET`, `NEXTAUTH_URL` and `ADMIN_PASSWORD` — none of them are
+read anywhere in the code and setting them does nothing.
+
+**On Vercel, `NEXT_PUBLIC_` variables must be Config, not Secret.** Vercel
+refuses the combination, correctly: that prefix inlines the value into browser
+JavaScript, so it cannot also be secret. The cloud name and the Supabase anon
+key are public by design — the anon key is protected by RLS, not by being
+hidden.
 
 ## Supabase Database
 
@@ -142,6 +176,14 @@ All tables use Row Level Security (RLS):
 | `projects` | Project cards |
 | `contact` | Contact page text and blog section |
 
+### Blog tables
+
+| Table | Purpose |
+|---|---|
+| `posts` | Markdown content, status, tags, cover image, SEO overrides |
+| `post_slugs` | Every slug a post has ever had, so renames never 404 |
+| `post_images` | Which Cloudinary assets each post owns, for cleanup and migration |
+
 ### Resume tables
 
 | Table | Purpose |
@@ -162,7 +204,16 @@ All tables use Row Level Security (RLS):
 | `check_chat_rate_limit()` | Atomic check-and-increment, returns TRUE if allowed |
 | `prune_chat_rate_limit()` | Housekeeping — drops rows older than a day |
 
-To apply schema from scratch: run `supabase/schema.sql`, then `supabase/resume_schema.sql`, then `supabase/chat_rate_limit.sql`, then `supabase/analytics_schema.sql`, then `supabase/rate_limit.sql` in Supabase SQL Editor.
+To apply schema from scratch, run these in the Supabase SQL Editor in order.
+All are idempotent and safe to re-run:
+
+1. `supabase/schema.sql` — portfolio tables
+2. `supabase/resume_schema.sql` — resume tables
+3. `supabase/project_case_studies.sql` — case study columns on `projects`
+4. `supabase/chat_rate_limit.sql` — chat limiter (predates the shared one)
+5. `supabase/analytics_schema.sql` — events table and aggregation functions
+6. `supabase/rate_limit.sql` — shared limiter used by `/api/contact`
+7. `supabase/blog_schema.sql` — posts, slug history, image ownership
 To fix a broken RLS-only migration: run `supabase/resume_patch.sql` (idempotent — safe to re-run).
 
 ### Critical Supabase pattern
@@ -261,6 +312,80 @@ colour).
 FontAwesome is separate and still needed — `SocialMedia.js` uses `fab fa-*`
 classes from the CDN stylesheet in `app/layout.js`.
 
+### Project case studies (`/projects/[slug]`)
+
+Opt-in per project: a row becomes a case study when it has a `slug` and at
+least one of `problem`, `approach` or `outcome` (`hasCaseStudy()` in
+`lib/portfolio-data.js`). Columns were added additively by
+`supabase/project_case_studies.sql`, so projects without them still render as
+plain cards.
+
+Sections render only when they have content, so a half-written case study shows
+no empty headings. Repo and live links are each conditional — several projects
+legitimately have neither, because the code is client property or the
+deployment no longer exists.
+
+### Blog (`/blog`)
+
+**Content is markdown in a text column.** Not HTML, not a block format. Markdown
+outlives renderers: `select slug, content from posts` is a directory of `.md`
+files if this ever leaves Supabase or Next, whereas stored HTML would be
+unmigratable. `content_format` exists so one post can move to MDX later without
+migrating the rest — nothing renders MDX yet.
+
+**Rendering** is `lib/markdown.js`: remark → rehype → Shiki, entirely
+server-side. A post arrives as static HTML with highlighting already applied and
+no client-side highlighter. Shiki emits both themes as CSS variables
+(`defaultColor: false`), so code follows the light/dark toggle without
+re-highlighting. Adding callouts, footnotes or diagrams later is a plugin here
+with no data migration — that is the whole point of storing markdown.
+
+**Images are Cloudinary.** Covers store a `public_id`, never a URL: a stored URL
+bakes in the cloud name, delivery domain and transformations, so changing any of
+them would break every post at once. `cloudinaryUrl()` builds the URL from one
+environment variable. Body images keep **full URLs** in the markdown —
+deliberately the opposite call, so the content still renders in GitHub or any
+other tool. `post_images` records ownership so assets stay enumerable for
+cleanup and for a scripted rewrite if the host ever changes.
+
+Uploads are signed server-side (`admin/app/api/cloudinary-sign`) and go straight
+from the browser to Cloudinary, so the API secret never reaches the client and
+image bytes never pass through a serverless function. The signing endpoint
+requires a valid Supabase session; without that it would hand anyone the
+account's storage and bandwidth. Deleting a post destroys its images, but only
+those no other post references.
+
+**Slugs are permanent.** `post_slugs` keeps every slug a post has ever had,
+maintained by a trigger rather than application code — a published URL is a
+promise, and an invariant that matters that much should not depend on
+remembering to write it. An old slug 308s to the current one; a slug that never
+existed is a genuine 404.
+
+**Scheduling falls out of RLS.** `status` and `published_at` are separate fields
+rather than a boolean, and the public policy is
+`status = 'published' and published_at <= now()`. A future date is simply
+invisible, with no application code involved.
+
+**Tags are real routes** (`/blog/tag/rust`), not `?tag=rust`. A query parameter
+would force the index to render dynamically on every request and gives search
+engines a weaker URL. An unused tag 404s so typos do not become thin pages.
+
+Copy buttons on code blocks are attached in a `useEffect` after render, because
+the pipeline runs on the server and a button needs a handler. **The cleanup must
+fully reverse the DOM mutation** — remove the button, unwrap the `<pre>`, delete
+the wrapper. An earlier version only detached the listener, and StrictMode's
+second pass saw an already-wrapped block, skipped it, and left a button with no
+handler: visually perfect, completely dead.
+
+### Theme contrast
+
+The light theme's `secondaryText` was `#7F8DAA`, which measures **3.34:1** on
+white — below the 4.5:1 WCAG AA requires for body text. It is now `#5F6B85`
+(5.35:1). The dark theme's equivalent already passed at 5.08:1 and is unchanged.
+
+Body copy uses `theme.text`, not `theme.secondaryText`. A muted colour that
+reads fine on a one-line caption is tiring over a thousand words.
+
 ### SEO
 
 `app/sitemap.js` and `app/robots.js` generate `/sitemap.xml` and `/robots.txt`.
@@ -290,7 +415,7 @@ position.
 ### Rendering and caching
 
 **Pages are statically generated and revalidated, not server-rendered per
-request.** `app/layout.js` sets `revalidate = 60`.
+request.** `app/layout.js` sets `revalidate = 3600`.
 
 It previously set `dynamic = "force-dynamic"`, which meant every visitor
 triggered a serverless function running `getAllSiteData()` — roughly ten
