@@ -1,0 +1,285 @@
+.post-body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px 90px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.post-header { margin: 24px 0 28px; }
+
+.post-title {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px;
+}
+
+.post-meta {
+  font-family: var(--font-text);
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.85;
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+}
+
+.post-tag {
+  font-family: var(--font-display);
+  font-size: 12px;
+  text-decoration: none;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(128, 128, 128, 0.28);
+  transition: opacity 0.18s;
+}
+.post-tag:hover { opacity: 0.7; }
+
+.post-cover {
+  width: 100%;
+  border-radius: 10px;
+  margin: 8px 0 32px;
+  background: rgba(128, 128, 128, 0.12);
+}
+
+/* ── Table of contents ──────────────────────────────────────── */
+
+.post-toc {
+  border-left: 2px solid rgba(128, 128, 128, 0.28);
+  padding: 4px 0 4px 18px;
+  margin: 0 0 36px;
+}
+.post-toc-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 8px;
+  letter-spacing: 0.3px;
+}
+.post-toc ul { list-style: none; padding: 0; margin: 0; }
+.post-toc li { margin: 4px 0; }
+.post-toc-h3 { padding-left: 16px; }
+.post-toc a {
+  font-family: var(--font-text);
+  font-size: 14px;
+  text-decoration: none;
+  transition: opacity 0.18s;
+}
+.post-toc a:hover { opacity: 0.7; text-decoration: underline; }
+
+/* ── Prose ──────────────────────────────────────────────────────
+   Long-form reading, so body copy uses the text stack rather than the
+   display face, at a comfortable measure. Headings keep the display face
+   so a post still reads as part of the site. */
+
+.post-prose {
+  font-family: var(--font-text);
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.post-prose > * + * { margin-top: 1.15em; }
+
+.post-prose h2,
+.post-prose h3,
+.post-prose h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 1.9em;
+  margin-bottom: 0.5em;
+  /* Anchors are linkable; keep them clear of a sticky header if one appears. */
+  scroll-margin-top: 24px;
+}
+.post-prose h2 { font-size: 26px; }
+.post-prose h3 { font-size: 20px; }
+.post-prose h4 { font-size: 17px; }
+
+.post-prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(128, 128, 128, 0.55);
+  transition: text-decoration-color 0.18s;
+}
+.post-prose a:hover { text-decoration-color: currentColor; }
+
+.post-prose ul,
+.post-prose ol { padding-left: 1.4em; }
+.post-prose li + li { margin-top: 0.35em; }
+
+.post-prose blockquote {
+  margin-left: 0;
+  margin-right: 0;
+  padding: 2px 0 2px 20px;
+  border-left: 3px solid rgba(128, 128, 128, 0.4);
+  font-style: italic;
+  opacity: 0.92;
+}
+
+.post-prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.post-prose hr {
+  border: none;
+  border-top: 1px solid rgba(128, 128, 128, 0.25);
+  margin: 2.4em 0;
+}
+
+/* Tables scroll rather than forcing the page to — a wide table should never
+   make the whole article scroll sideways on a phone. */
+.post-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  display: block;
+  overflow-x: auto;
+}
+.post-prose th,
+.post-prose td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.22);
+}
+.post-prose th { font-family: var(--font-display); font-weight: 500; }
+
+/* ── Code ───────────────────────────────────────────────────── */
+
+.post-prose :not(pre) > code {
+  font-size: 0.88em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(128, 128, 128, 0.16);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.post-prose pre {
+  overflow-x: auto;
+  padding: 16px 18px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+}
+
+.post-prose pre code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: none;
+  padding: 0;
+}
+
+/* Shiki emits both themes as CSS variables (defaultColor: false), so the code
+   block follows the site's light/dark toggle with no re-highlighting and no
+   second render. */
+.post-prose .shiki,
+.post-prose .shiki span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+}
+
+[data-theme="dark"] .post-prose .shiki,
+[data-theme="dark"] .post-prose .shiki span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+}
+
+@media (max-width: 640px) {
+  .post-title { font-size: 29px; }
+  .post-prose { font-size: 16px; }
+  .post-prose h2 { font-size: 22px; }
+}
+
+/* ── Code copy button ───────────────────────────────────────── */
+
+.post-code {
+  position: relative;
+}
+
+/* Hidden until the block is hovered or the button itself is focused, so it
+   does not sit over the code while reading — but still reachable by keyboard,
+   which display:none until hover would not be. */
+.post-code-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  background: rgba(128, 128, 128, 0.14);
+  color: inherit;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  backdrop-filter: blur(4px);
+}
+
+.post-code:hover .post-code-copy,
+.post-code-copy:focus-visible {
+  opacity: 1;
+}
+
+.post-code-copy:hover { background: rgba(128, 128, 128, 0.26); }
+.post-code-copy.is-copied {
+  opacity: 1;
+  border-color: rgba(52, 168, 83, 0.6);
+}
+
+/* Touch devices have no hover, so the button would never appear. */
+@media (hover: none) {
+  .post-code-copy { opacity: 1; }
+}
+
+/* ── Prev / next ────────────────────────────────────────────── */
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(128, 128, 128, 0.22);
+}
+
+.post-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+  max-width: 46%;
+  transition: opacity 0.18s;
+}
+.post-nav-link:hover { opacity: 0.72; }
+.post-nav-right { text-align: right; margin-left: auto; }
+
+.post-nav-dir {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+.post-nav-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+@media (max-width: 640px) {
+  .post-nav { flex-direction: column; gap: 20px; }
+  .post-nav-right { text-align: left; margin-left: 0; }
+}

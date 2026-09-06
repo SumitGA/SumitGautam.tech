@@ -5,7 +5,10 @@ const lightTheme = {
   body: "#FFFFFF",
   text: "#343434",
   dark: "#000000",
-  secondaryText: "#7F8DAA",
+  // #7F8DAA measured 3.34:1 on white — below the 4.5:1 WCAG AA needs for body
+  // text. This keeps the same blue-grey character at 5.35:1. The dark theme's
+  // equivalent already passed at 5.08:1 and is unchanged.
+  secondaryText: "#5F6B85",
   accentColor: "#E3405F",
   accentBright: "#FC1056",
   projectCard: "#DCE4F2",

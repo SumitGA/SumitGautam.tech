@@ -69,6 +69,11 @@ function Header() {
             </Link>
           </li>
           <li>
+            <Link href="/blog" style={{ borderRadius: 5, color: theme.text, ...isActive("/blog") }}>
+              Blog
+            </Link>
+          </li>
+          <li>
             <Link href="/contact" style={{ borderRadius: 5, color: theme.text, ...isActive("/contact") }}>
               Contact
             </Link>
