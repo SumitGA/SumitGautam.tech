@@ -264,6 +264,23 @@ async function saveData() {
 | Streaming vs non-streaming | `gemini-3.5-flash-lite` responds fine to `generateContent` but stalls >20s on `generateContentStream`. Test the *streaming* path when changing models. |
 | Model retirement | `gemini-2.0-flash` and `gemini-2.5-flash` are retired and 404 with a message naming the replacement. Expect this to recur. |
 
+**The assistant knows about the blog, but not by reading all of it.** The
+system prompt is rebuilt every ten minutes *and sent with every message*, so
+anything in it is paid for on every turn and would grow without limit as posts
+accumulate. `getPostsForPrompt()` therefore gives every post its title, excerpt
+and section headings (~145 tokens each) and only the newest
+`FULL_POSTS_IN_PROMPT` posts their full body (~2,337 tokens each) — a 16:1
+ratio, which is the whole design. Headings are the load-bearing part: they
+describe the territory precisely enough for the model to answer specifically
+and cite the path.
+
+Measured, not assumed, and it is **linear with a smaller slope, not flat** —
+at 100 posts this is ~27,900 tokens against ~240,000 for sending everything.
+The trigger for moving to retrieval, the two cheaper optimisations that come
+first (the projects section is 70% of the base prompt), and the failure modes
+are in **`docs/assistant-context-budget.md`**. Read it before changing
+`FULL_POSTS_IN_PROMPT`.
+
 **Route design notes:**
 
 - Retries only happen **before the first byte is sent**. Once the visitor is reading a sentence we can't restart it, so a mid-stream failure appends `" …"` and closes cleanly.
