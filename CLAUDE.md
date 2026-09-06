@@ -351,7 +351,23 @@ cleanup and for a scripted rewrite if the host ever changes.
 
 Uploads are signed server-side (`admin/app/api/cloudinary-sign`) and go straight
 from the browser to Cloudinary, so the API secret never reaches the client and
-image bytes never pass through a serverless function. The signing endpoint
+image bytes never pass through a serverless function.
+
+**An image already in the account can be re-used rather than uploaded again.**
+`admin/app/api/cloudinary-list` enumerates assets through the Admin API — there
+is no public way to list an account's images, correctly so — and the picker in
+the blog editor sets `cover_public_id` or inserts a URL directly. Without it
+the editor could only upload, so using one picture in two posts created a
+duplicate: storage spent twice, and two `public_id`s for one image, meaning a
+later cleanup could only ever find half of it. A picked image is still recorded
+in `post_images`; the upsert is keyed on `(post_id, public_id)`, and shared
+ownership is exactly what stops a delete removing an asset another post uses.
+
+URLs for picked images are `encodeURI`d before going into the markdown. A
+`public_id` may contain a space — this account already has `My Brand/watermark`
+— and markdown ends a link target at the first space, so an unencoded URL
+produces a silently broken image. Uploads are unaffected, since Cloudinary
+returns an already-encoded URL. The signing endpoint
 requires a valid Supabase session; without that it would hand anyone the
 account's storage and bandwidth. Deleting a post destroys its images, but only
 those no other post references.
@@ -605,6 +621,15 @@ needed for chat rate limiting).
 - Sections: Greeting, Skills, Experience, Education, Certifications, Projects, Contact, Resume/CV, Settings
 - All admin pages use `getSupabaseBrowser()` lazily (never at component top level)
 - Toast notifications use `useToast` — always pass `error ? "error" : "success"` (string), never a boolean
+- The blog editor imports and exports frontmatter (`admin/lib/frontmatter.js`).
+  Pasting a post fills title, excerpt, tags, series and cover from the header;
+  "Copy for dev.to" emits a block with `canonical_url` already pointing here,
+  which is the field that decides whose copy of the writing search engines
+  credit. It is hand-written rather than a YAML dependency: the frontmatter
+  involved is flat scalars and one comma list, and a full YAML parser would be
+  a much larger surface for nothing extra. It exports `published: false` so a
+  cross-post is reviewed on the other site before going live, and strips
+  hyphens and caps at four tags because dev.to rejects both.
 - Render Toast as `{Toast}` (JSX element value), never `<Toast />` (component)
 
 ## Releases

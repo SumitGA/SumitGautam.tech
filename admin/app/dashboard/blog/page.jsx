@@ -3,6 +3,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getSupabaseBrowser } from "../../../lib/supabase";
 import { useToast } from "../../../components/useToast";
 import { cloudinaryUrl, uploadImage, deleteImages } from "../../../lib/cloudinary";
+import ImagePicker from "../../../components/ImagePicker";
+import {
+  parseFrontmatter,
+  fieldsToPost,
+  publicIdFromUrl,
+  toDevtoFrontmatter,
+} from "../../../lib/frontmatter";
 
 const EMPTY = {
   slug: "",
@@ -220,6 +227,9 @@ function PostEditor({ post, onClose, onSaved, show }) {
   const [uploading, setUploading] = useState(false);
   const [tagInput, setTagInput] = useState("");
   const [projects, setProjects] = useState([]);
+  const [picker, setPicker] = useState(null);      // null | "cover" | "body"
+  const [pickerToken, setPickerToken] = useState(null);
+  const [pasteText, setPasteText] = useState("");
   const contentRef = useRef(null);
   const isNew = !data.id;
 
@@ -294,6 +304,82 @@ function PostEditor({ post, onClose, onSaved, show }) {
     }
   }
 
+  async function openPicker(target) {
+    setPickerToken(await accessToken());
+    setPicker(target);
+  }
+
+  /* Re-using an image, as opposed to uploading one. It still goes into
+     _newImages: that list becomes post_images rows, and ownership is what lets
+     a delete know an asset is still referenced elsewhere. The upsert is keyed
+     on (post_id, public_id), so recording it twice is harmless. */
+  function pickImage(img) {
+    const publicId = img.publicId;
+    if (picker === "cover") {
+      setData((d) => ({
+        ...d,
+        cover_public_id: publicId,
+        _newImages: [...(d._newImages || []), publicId],
+      }));
+    } else {
+      const el = contentRef.current;
+      /* encodeURI, because a public_id may contain spaces — the account
+         already has "My Brand/watermark". Markdown terminates a link target at
+         the first space, so an unencoded URL here silently produces a broken
+         image. Uploads are unaffected: Cloudinary returns an encoded URL. */
+      const snippet = `\n![](${encodeURI(cloudinaryUrl(publicId))})\n`;
+      const at = el ? el.selectionStart : (data.content?.length || 0);
+      setData((d) => ({
+        ...d,
+        content: (d.content || "").slice(0, at) + snippet + (d.content || "").slice(at),
+        _newImages: [...(d._newImages || []), publicId],
+      }));
+    }
+    show("Image added");
+  }
+
+  /* Pasting a post in from somewhere else. The frontmatter maps onto columns;
+     anything it cannot map is reported rather than dropped silently, because a
+     cover that quietly vanished would be found much later, on the live site. */
+  function applyPaste() {
+    const { fields, body } = parseFrontmatter(pasteText);
+    if (!body.trim()) return show("Nothing to import.", "error");
+    if (data.content?.trim() && !confirm("Replace the current content?")) return;
+
+    const mapped = fieldsToPost(fields);
+    const { _coverUrl, ...rest } = mapped;
+    const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const coverId = publicIdFromUrl(_coverUrl, cloud);
+
+    setData((d) => ({
+      ...d,
+      ...rest,
+      slug: d.slug || (rest.title ? slugify(rest.title) : d.slug),
+      content: body,
+      ...(coverId ? { cover_public_id: coverId } : {}),
+    }));
+    setPasteText("");
+
+    if (_coverUrl && !coverId) {
+      show("Imported. The cover is hosted elsewhere — upload it here.", "error");
+    } else {
+      show("Imported");
+    }
+  }
+
+  async function copyForDevto() {
+    const text = toDevtoFrontmatter(data, {
+      siteUrl: process.env.NEXT_PUBLIC_PORTFOLIO_URL || "https://sumitgautam.tech",
+      coverUrl: data.cover_public_id ? cloudinaryUrl(data.cover_public_id) : null,
+    });
+    try {
+      await navigator.clipboard.writeText(text);
+      show("Copied — published: false, so review it there before going live");
+    } catch {
+      show("Clipboard blocked by the browser.", "error");
+    }
+  }
+
   function addTag() {
     const t = tagInput.trim().toLowerCase();
     if (!t || data.tags?.includes(t)) return setTagInput("");
@@ -360,6 +446,14 @@ function PostEditor({ post, onClose, onSaved, show }) {
       <div style={{ display: "flex", gap: 12, marginBottom: 18 }}>
         <button className="btn-secondary" onClick={onClose}>← Back</button>
         <div style={{ flex: 1 }} />
+        <button
+          className="btn-secondary"
+          onClick={copyForDevto}
+          disabled={!data.title?.trim() || !data.slug?.trim()}
+          title="Frontmatter with canonical_url pointing here, plus the body"
+        >
+          Copy for dev.to
+        </button>
         <button className="btn-secondary" disabled={saving} onClick={() => save({ publish: false })}>
           Save draft
         </button>
@@ -427,6 +521,8 @@ function PostEditor({ post, onClose, onSaved, show }) {
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <input type="file" accept="image/*" disabled={uploading}
             onChange={(e) => handleUpload(e.target.files?.[0], { asCover: true })} />
+          <button className="btn-secondary" style={{ fontSize: 13 }}
+            onClick={() => openPicker("cover")}>Choose existing</button>
           {data.cover_public_id && (
             <button className="btn-secondary" style={{ fontSize: 13 }}
               onClick={() => setData((d) => ({ ...d, cover_public_id: null }))}>Remove</button>
@@ -456,11 +552,37 @@ function PostEditor({ post, onClose, onSaved, show }) {
             <input type="file" accept="image/*" hidden disabled={uploading}
               onChange={(e) => handleUpload(e.target.files?.[0], { asCover: false })} />
           </label>
+          <button className="btn-secondary" style={{ fontSize: 13 }}
+            onClick={() => openPicker("body")}>Choose existing</button>
           <span style={{ fontSize: 12, color: "var(--muted)" }}>
             {readingMinutes(data.content)} min read
           </span>
         </div>
       </div>
+
+      <details style={{ marginTop: 6, marginBottom: 14 }}>
+        <summary style={{ cursor: "pointer", fontSize: 13, color: "var(--muted)" }}>
+          Paste markdown with frontmatter
+        </summary>
+        <div style={{ marginTop: 10 }}>
+          <textarea
+            rows={6}
+            value={pasteText}
+            onChange={(e) => setPasteText(e.target.value)}
+            placeholder={"---\ntitle: …\ndescription: …\ntags: rust, postgres\n---\n\nThe post body."}
+            style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 12.5 }}
+          />
+          <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 8 }}>
+            <button className="btn-secondary" onClick={applyPaste} disabled={!pasteText.trim()}>
+              Import
+            </button>
+            <span style={{ fontSize: 12, color: "var(--muted)" }}>
+              Fills title, excerpt, tags, series and cover from the header. A cover
+              hosted outside this Cloudinary account has to be uploaded here.
+            </span>
+          </div>
+        </div>
+      </details>
 
       <div className="field">
         <label>Series — leave blank for a standalone post</label>
@@ -524,6 +646,14 @@ function PostEditor({ post, onClose, onSaved, show }) {
           </div>
         </div>
       </details>
+
+      {picker && (
+        <ImagePicker
+          token={pickerToken}
+          onPick={pickImage}
+          onClose={() => setPicker(null)}
+        />
+      )}
     </div>
   );
 }
