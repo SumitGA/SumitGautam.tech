@@ -45,7 +45,7 @@ export default function BlogIndex({ posts, tags, activeTag }) {
             <Link
               href="/blog"
               className={`blog-tag ${!activeTag ? "is-active" : ""}`}
-              style={!activeTag ? { backgroundColor: theme.accentBright, color: "#fff" } : { color: theme.secondaryText }}
+              style={!activeTag ? { backgroundColor: theme.accentSolid, color: "#fff" } : { color: theme.secondaryText }}
             >
               All
             </Link>
@@ -56,7 +56,7 @@ export default function BlogIndex({ posts, tags, activeTag }) {
                 className={`blog-tag ${activeTag === tag ? "is-active" : ""}`}
                 style={
                   activeTag === tag
-                    ? { backgroundColor: theme.accentBright, color: "#fff" }
+                    ? { backgroundColor: theme.accentSolid, color: "#fff" }
                     : { color: theme.secondaryText }
                 }
               >

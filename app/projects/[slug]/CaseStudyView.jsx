@@ -75,7 +75,7 @@ export default function CaseStudyView({ project, posts = [] }) {
                   href={live_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ backgroundColor: theme.accentBright }}
+                  style={{ backgroundColor: theme.accentSolid }}
                 >
                   View live
                 </a>

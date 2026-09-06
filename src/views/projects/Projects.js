@@ -46,7 +46,7 @@ export default function Projects() {
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => track("outbound_click", { meta: { target: "github-profile" } })}
-          style={{ backgroundColor: theme.accentBright }}
+          style={{ backgroundColor: theme.accentSolid }}
         >
           <FaGithub />
           More projects on GitHub

@@ -38,7 +38,7 @@ export default function ContactForm({ theme }) {
     }
   }
 
-  const accentColor = theme?.accentBright || "#1a73e8";
+  const accentColor = theme?.accentSolid || "#1a73e8";
 
   return (
     <div className="cf-wrapper">

@@ -42,7 +42,7 @@ export default function Contact() {
             <Link
               className="general-btn"
               href="/resume"
-              style={{ backgroundColor: theme.accentBright }}
+              style={{ backgroundColor: theme.accentSolid }}
             >
               See my Resume
             </Link>
@@ -57,13 +57,28 @@ export default function Contact() {
               {blogSection.subtitle}
             </p>
             <div className="blogsite-btn-div">
-              <a
-                className="general-btn"
-                href={blogSection.link}
-                style={{ backgroundColor: theme.accentBright }}
-              >
-                My Twitter Profile
-              </a>
+              {/* The label is code, not content, so it has to describe wherever
+                  blog_link actually points. An internal path gets a Link so the
+                  navigation stays client-side; anything else stays an anchor. */}
+              {String(blogSection.link || "").startsWith("/") ? (
+                <Link
+                  className="general-btn"
+                  href={blogSection.link}
+                  style={{ backgroundColor: theme.accentSolid }}
+                >
+                  Read the blog
+                </Link>
+              ) : (
+                <a
+                  className="general-btn"
+                  href={blogSection.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ backgroundColor: theme.accentSolid }}
+                >
+                  Read more
+                </a>
+              )}
             </div>
           </div>
           <div className="blog-heading-img-div">

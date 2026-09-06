@@ -461,9 +461,11 @@ reads fine on a one-line caption is tiring over a thousand words.
 
 `accentBright` (`#FC1056`) measures **3.93:1** against white — enough for large
 text, short of the 4.5:1 a button-sized label needs. `accentSolid` (`#E80F4F`)
-is the same red 8% darker at **4.55:1**, and is what should sit behind white
-text. The active tag chip on the blog index still uses `accentBright` and so
-still fails; it predates the token.
+is the same red 8% darker at **4.55:1**. **Every solid fill behind white text
+now uses `accentSolid`** — the eight call sites are the greeting, projects and
+contact CTAs, the case-study live link, the contact form's submit button and
+the blog tag chips. `accentBright` remains for non-text uses, where the
+threshold is 3:1 rather than 4.5:1.
 
 ### SEO
 

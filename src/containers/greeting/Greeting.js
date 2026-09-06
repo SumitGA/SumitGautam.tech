@@ -30,7 +30,7 @@ export default function Greeting() {
               <button
                 className="button"
                 onClick={() => router.push("/contact")}
-                style={{ backgroundColor: theme.accentBright }}
+                style={{ backgroundColor: theme.accentSolid }}
               >
                 Contact Me
               </button>
