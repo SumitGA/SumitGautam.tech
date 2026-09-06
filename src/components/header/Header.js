@@ -9,7 +9,7 @@ import { useAppTheme, useSiteData } from "../../../app/providers";
 
 function Header() {
   const { theme, setTheme } = useAppTheme();
-  const { greeting } = useSiteData() || {};
+  const { greeting, hasPosts } = useSiteData() || {};
   const pathname = usePathname();
   const [currTheme, setCurrTheme] = useState(theme.name);
 
@@ -68,11 +68,15 @@ function Header() {
               Projects
             </Link>
           </li>
-          <li>
-            <Link href="/blog" style={{ borderRadius: 5, color: theme.text, ...isActive("/blog") }}>
-              Blog
-            </Link>
-          </li>
+          {/* Hidden until something is published — a Blog link that leads to
+              "No posts yet" advertises the emptiness rather than the section. */}
+          {hasPosts && (
+            <li>
+              <Link href="/blog" style={{ borderRadius: 5, color: theme.text, ...isActive("/blog") }}>
+                Blog
+              </Link>
+            </li>
+          )}
           <li>
             <Link href="/contact" style={{ borderRadius: 5, color: theme.text, ...isActive("/contact") }}>
               Contact
