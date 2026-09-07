@@ -20,38 +20,38 @@ export default function SocialMedia() {
   return (
     <div className="social-media-div" onClick={handleClick}>
       {socialMediaLinks.github && (
-        <a href={socialMediaLinks.github} className="icon-button github" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-github"></i><span></span>
+        <a href={socialMediaLinks.github} className="icon-button github" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+          <i className="fab fa-github" aria-hidden="true"></i><span aria-hidden="true"></span>
         </a>
       )}
       {socialMediaLinks.linkedin && (
-        <a href={socialMediaLinks.linkedin} className="icon-button linkedin" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-linkedin-in"></i><span></span>
+        <a href={socialMediaLinks.linkedin} className="icon-button linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+          <i className="fab fa-linkedin-in" aria-hidden="true"></i><span aria-hidden="true"></span>
         </a>
       )}
       {socialMediaLinks.gmail && (
-        <a href={`mailto:${socialMediaLinks.gmail}`} className="icon-button google" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-google"></i><span></span>
+        <a href={`mailto:${socialMediaLinks.gmail}`} className="icon-button google" target="_blank" rel="noopener noreferrer" aria-label="Email Sumit">
+          <i className="fab fa-google" aria-hidden="true"></i><span aria-hidden="true"></span>
         </a>
       )}
       {socialMediaLinks.twitter && (
-        <a href={socialMediaLinks.twitter} className="icon-button twitter" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-twitter"></i><span></span>
+        <a href={socialMediaLinks.twitter} className="icon-button twitter" target="_blank" rel="noopener noreferrer" aria-label="Twitter profile">
+          <i className="fab fa-twitter" aria-hidden="true"></i><span aria-hidden="true"></span>
         </a>
       )}
       {socialMediaLinks.instagram && (
-        <a href={socialMediaLinks.instagram} className="icon-button instagram" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-instagram"></i><span></span>
+        <a href={socialMediaLinks.instagram} className="icon-button instagram" target="_blank" rel="noopener noreferrer" aria-label="Instagram profile">
+          <i className="fab fa-instagram" aria-hidden="true"></i><span aria-hidden="true"></span>
         </a>
       )}
       {socialMediaLinks.bitbucket && (
-        <a href={socialMediaLinks.bitbucket} className="icon-button bitbucket" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-bitbucket"></i><span></span>
+        <a href={socialMediaLinks.bitbucket} className="icon-button bitbucket" target="_blank" rel="noopener noreferrer" aria-label="Bitbucket profile">
+          <i className="fab fa-bitbucket" aria-hidden="true"></i><span aria-hidden="true"></span>
         </a>
       )}
       {socialMediaLinks.facebook && (
-        <a href={socialMediaLinks.facebook} className="icon-button facebook" target="_blank" rel="noopener noreferrer">
-          <i className="fab fa-facebook-f"></i><span></span>
+        <a href={socialMediaLinks.facebook} className="icon-button facebook" target="_blank" rel="noopener noreferrer" aria-label="Facebook profile">
+          <i className="fab fa-facebook-f" aria-hidden="true"></i><span aria-hidden="true"></span>
         </a>
       )}
     </div>

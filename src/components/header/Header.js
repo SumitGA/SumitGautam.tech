@@ -89,6 +89,13 @@ function Header() {
           </li>
           <button
             onClick={changeTheme}
+            /* The button's only content is an icon, so without this a screen
+               reader announces "button" and nothing else. The label states the
+               action rather than the current state, which is what a user needs
+               to decide whether to press it. */
+            aria-label={
+              currTheme === "light" ? "Switch to dark theme" : "Switch to light theme"
+            }
             style={{
               cursor: "pointer",
               height: 45,

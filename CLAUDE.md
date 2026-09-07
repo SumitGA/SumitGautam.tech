@@ -467,6 +467,31 @@ contact CTAs, the case-study live link, the contact form's submit button and
 the blog tag chips. `accentBright` remains for non-text uses, where the
 threshold is 3:1 rather than 4.5:1.
 
+### Accessibility
+
+PageSpeed Insights scored the site 99 desktop / 90 mobile on performance and
+100 on SEO, but **79 on accessibility**. Three causes, all now fixed:
+
+- **Seven social links had no accessible name.** Each wrapped only
+  `<i class="fab fa-*">` and an empty `<span>`, so a screen reader announced
+  seven identical "link"s. They carry `aria-label` now, and the icon and the
+  decorative span are `aria-hidden`. The certificate links on `/education` had
+  the same shape — an image and an overlay div, no text.
+- **The theme toggle had no accessible name.** Its only content is an SVG. The
+  label states the action (`Switch to dark theme`), not the current state,
+  because that is what a user needs in order to decide whether to press it.
+- **Headings did not nest.** The home page had four `<h1>`s and `/experience`
+  and `/education` jumped `h1` straight to `h3`. Section headings are now `h2`
+  and card titles `h3`.
+
+No CSS selects on a heading tag — every heading is styled by class — so the
+levels can be corrected without touching the design. Check that before moving
+one.
+
+The invariant worth keeping: **one `h1` per page, no skipped levels, and every
+link and button has a name.** All three are mechanically checkable against
+rendered HTML rather than by eye.
+
 ### SEO
 
 `app/sitemap.js` and `app/robots.js` generate `/sitemap.xml` and `/robots.txt`.

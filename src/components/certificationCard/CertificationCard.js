@@ -15,7 +15,14 @@ function CertificationCard(props) {
       }}
     >
       <div className="content">
-        <a href={certificate.certificate_link} target="_blank" rel="noopener noreferrer">
+        <a
+          href={certificate.certificate_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          /* The card's visible title sits outside the link, so without
+             this the link announces as "link" with no destination. */
+          aria-label={`${certificate.title} certificate`}
+        >
           <div className="content-overlay"></div>
           <div className="cert-header" style={{ backgroundColor: certificate.color_code }}>
             <img className="logo_img" src={certificate.logo_path} alt={certificate.alt_name} />

@@ -28,7 +28,7 @@ export default function SkillSection({ theme }) {
                   <GetSkillSvg fileName={skill.fileName} theme={theme} />
                 </div>
                 <div className="skills-text-div fade-in-right">
-                  <h1 className="skills-heading" style={{ color: theme.text }}>{skill.title}</h1>
+                  <h3 className="skills-heading" style={{ color: theme.text }}>{skill.title}</h3>
                   <SoftwareSkill logos={skill.softwareSkills} />
                   <div>
                     {skill.skills.map((s) => (
@@ -40,7 +40,7 @@ export default function SkillSection({ theme }) {
             ) : (
               <>
                 <div className="skills-text-div fade-in-left">
-                  <h1 className="skills-heading" style={{ color: theme.text }}>{skill.title}</h1>
+                  <h3 className="skills-heading" style={{ color: theme.text }}>{skill.title}</h3>
                   <SoftwareSkill logos={skill.softwareSkills} />
                   <div>
                     {skill.skills.map((s) => (

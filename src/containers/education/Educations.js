@@ -11,9 +11,9 @@ export default function Educations({ theme }) {
   return (
     <div className="main" id="educations">
       <div className="educations-header-div">
-        <h1 className="educations-header fade-in-up" style={{ color: theme.text }}>
+        <h2 className="educations-header fade-in-up" style={{ color: theme.text }}>
           Degrees Received
-        </h1>
+        </h2>
       </div>
       <div className="educations-body-div">
         {degrees.degrees.map((degree) => (

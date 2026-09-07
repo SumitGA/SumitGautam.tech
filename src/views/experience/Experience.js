@@ -26,9 +26,9 @@ export default function Experience() {
             <h1 className="experience-heading-text" style={{ color: theme.text }}>
               {experience.title}
             </h1>
-            <h3 className="experience-heading-sub-text" style={{ color: theme.text }}>
+            <h2 className="experience-heading-sub-text" style={{ color: theme.text }}>
               {experience.subtitle}
-            </h3>
+            </h2>
             <p className="experience-header-detail-text subTitle" style={{ color: theme.secondaryText }}>
               {experience.description}
             </p>

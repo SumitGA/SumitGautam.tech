@@ -11,9 +11,9 @@ export default function Certifications({ theme }) {
   return (
     <div className="main" id="certs">
       <div className="certs-header-div">
-        <h1 className="certs-header fade-in-up" style={{ color: theme.text }}>
+        <h2 className="certs-header fade-in-up" style={{ color: theme.text }}>
           Certifications
-        </h1>
+        </h2>
       </div>
       <div className="certs-body-div">
         {certifications.certifications.map((cert) => (
