@@ -494,10 +494,28 @@ rendered HTML rather than by eye.
 
 ### SEO
 
-`app/sitemap.js` and `app/robots.js` generate `/sitemap.xml` and `/robots.txt`.
-Static routes come from `routes` in `lib/site.js`; case study URLs are pulled
-from Supabase via `getCaseStudySlugs()`, so the sitemap regenerates hourly
-(`revalidate = 3600`) rather than freezing at build time.
+`app/sitemap.xml/route.js` and `app/robots.js` generate `/sitemap.xml` and
+`/robots.txt`. Static routes come from `routes` in `lib/site.js`; case study
+URLs are pulled from Supabase via `getCaseStudySlugs()`, and posts and tags
+from `getPosts()` / `getAllTags()`, so the sitemap regenerates hourly
+(`revalidate = 3600`) and on every admin save.
+
+**The sitemap is a hand-written Route Handler, not `app/sitemap.js`.** The
+metadata convention froze in production: it exported `revalidate = 3600` and
+the build manifest recorded it, but six days after the 2026-09-07 deploy the
+live file still listed 4 of 6 posts and 12 of 17 tags, and an explicit
+`revalidatePath("/sitemap.xml")` returned `revalidated: true` without moving
+it. `app/sitemap.js` is documented as "a special Route Handler that is cached
+by default", and that default outranks the revalidate window. An ordinary
+handler — the shape `blog/rss.xml/route.js` has used all along, which stayed
+current throughout — participates in ISR and on-demand revalidation like any
+other route. The cost is emitting the XML by hand, which is a dozen lines.
+
+This failure is worth recognising by shape: a **stale** sitemap is more
+harmful than a missing one, because it tells a crawler with total confidence
+that the new pages do not exist. Check it against the database after any change
+to how posts are published, not by eye — `grep -c '<url>'` on the live file
+against the row count is the whole test.
 
 **Every route must declare its own `alternates.canonical`.** The root layout
 deliberately sets none. It used to default to `"/"`, which every page inherited
